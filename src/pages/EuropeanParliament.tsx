@@ -63,7 +63,7 @@ export const EuropeanParliament = () => {
     ];
   };
 
-  const [options, setOptions] = useState({
+  const [options, _] = useState({
     chart: {
       type: "item",
     },

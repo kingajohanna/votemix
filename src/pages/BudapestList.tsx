@@ -4,7 +4,7 @@ import Highcharts from "highcharts";
 import { useState } from "react";
 
 export const BudapestList = () => {
-  const [options, setOptions] = useState({
+  const [options, _] = useState({
     chart: {
       type: "item",
     },
