@@ -20,7 +20,7 @@ export interface PartyData {
 
 interface EditableTableProps {
   data: PartyData[];
-  setData: React.Dispatch<React.SetStateAction<PartyData[]>>;
+  setData: Function;
 }
 
 export const EditableTable: React.FC<EditableTableProps> = ({

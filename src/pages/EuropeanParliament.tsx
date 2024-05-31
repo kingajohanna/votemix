@@ -2,9 +2,13 @@ import HighchartsReact from "highcharts-react-official";
 import { Menu } from "../components/Menu";
 import itemSeries from "highcharts/modules/item-series";
 import Highcharts from "highcharts";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { EditableTable, PartyData } from "../components/EditableTable";
 import { Box } from "@mui/material";
+import { db } from "../App";
+import { doc, getDoc, setDoc } from "firebase/firestore";
+import { useLocalStorage } from "../hooks/useLocalStorage";
+import { calculateMandates } from "../utils/ep";
 
 itemSeries(Highcharts);
 
@@ -54,16 +58,38 @@ const initalData: PartyData[] = [
 ];
 
 export const EuropeanParliament = () => {
+  const [username, _] = useLocalStorage("username");
   const [data, setData] = useState(initalData);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      const docRef = doc(db, "votemix", username);
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        if (docSnap.data().ep.length === 0) {
+          setData(initalData);
+        }
+        setData(docSnap.data().ep);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   const getData = () => {
-    return [
-      ...data.map((row) => [row.name, row.mandates, row.color, row.name]),
-      ["no party", 21, "#a6a4a4", "no party"],
-    ];
+    let sum = 0;
+    data.map((row) => (sum += row.mandates));
+
+    if (21 - sum > 0) {
+      return [
+        ...data.map((row) => [row.name, row.mandates, row.color, row.name]),
+        ["no party", 21 - sum, "#a6a4a4", "no party"],
+      ];
+    }
+    return data.map((row) => [row.name, row.mandates, row.color, row.name]);
   };
 
-  const [options, _] = useState({
+  const [options, setOptions] = useState({
     chart: {
       type: "item",
     },
@@ -94,6 +120,18 @@ export const EuropeanParliament = () => {
     ],
   });
 
+  useEffect(() => {
+    setOptions({
+      ...options,
+      series: [
+        {
+          ...options.series[0],
+          data: getData(),
+        },
+      ],
+    });
+  }, [data]);
+
   return (
     <Menu title="Európai Parlament">
       <Box
@@ -103,8 +141,19 @@ export const EuropeanParliament = () => {
           highcharts={Highcharts}
           options={options}
           containerProps={{ style: { width: "100%" } }}
+          updateArgs={[true, true, true]}
         />
-        {data && <EditableTable data={data} setData={setData} />}
+        {data && (
+          <EditableTable
+            data={data}
+            setData={(value: PartyData[]) => {
+              const newValue = calculateMandates(value, 21);
+              setData(newValue);
+              const userRef = doc(db, "votemix", username);
+              setDoc(userRef, { ep: newValue }, { merge: true });
+            }}
+          />
+        )}
       </Box>
     </Menu>
   );
