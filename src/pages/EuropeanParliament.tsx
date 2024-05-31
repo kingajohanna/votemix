@@ -60,6 +60,7 @@ const initalData: PartyData[] = [
 export const EuropeanParliament = () => {
   const [username, _] = useLocalStorage("username");
   const [data, setData] = useState(initalData);
+  //const [guesses, setGuesses] = useState<Guess[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -72,6 +73,19 @@ export const EuropeanParliament = () => {
           setData(initalData);
         }
       }
+
+      /* const querySnapshot = await getDocs(collection(db, "votemix"));
+      let guesses: Guess[] = [];
+      querySnapshot.forEach((doc) =>
+        guesses.push({
+          username: doc.id,
+          data: doc.data().ep.map((row: PartyData) => ({
+            name: row.name,
+            percentage: row.percentage,
+          })),
+        })
+      );
+      setGuesses(guesses); */
     };
 
     fetchData();
@@ -155,6 +169,7 @@ export const EuropeanParliament = () => {
             }}
           />
         )}
+        {/*guesses.length > 0 && <Guesses guesses={guesses} />*/}
       </Box>
     </Menu>
   );

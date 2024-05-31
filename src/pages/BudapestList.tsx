@@ -85,7 +85,7 @@ export const BudapestList = () => {
     if (21 - sum > 0) {
       return [
         ...data.map((row) => [row.name, row.mandates, row.color, row.name]),
-        ["no party", 33 - sum, "#a6a4a4", "no party"],
+        ["no party", 32 - sum, "#a6a4a4", "no party"],
       ];
     }
     return data.map((row) => [row.name, row.mandates, row.color, row.name]);
@@ -149,7 +149,7 @@ export const BudapestList = () => {
           <EditableTable
             data={data}
             setData={(value: PartyData[]) => {
-              const newValue = calculateMandates(value, 33);
+              const newValue = calculateMandates(value, 32);
               setData(newValue);
               const userRef = doc(db, "votemix", username);
               setDoc(userRef, { budapestlist: newValue }, { merge: true });

@@ -1,4 +1,5 @@
 import {
+  Box,
   InputAdornment,
   OutlinedInput,
   Paper,
@@ -30,6 +31,8 @@ export const EditableTable: React.FC<EditableTableProps> = ({
   setData,
 }) => {
   const [error, setError] = useState(false);
+  let sum = 0;
+  data.map((row) => (sum += row.percentage));
 
   const handleInputChange = (
     id: number,
@@ -57,45 +60,55 @@ export const EditableTable: React.FC<EditableTableProps> = ({
   };
 
   return (
-    <TableContainer component={Paper} sx={{ maxWidth: "430px", width: "100%" }}>
-      <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell>Pártnév</TableCell>
-            <TableCell>Mandátum</TableCell>
-            <TableCell>Százalék</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {data.map((row) => (
-            <TableRow key={row.id}>
-              <TableCell sx={{ width: "33%" }}>
-                <Typography>{row.name}</Typography>
-              </TableCell>
-              <TableCell sx={{ width: "33%" }}>
-                <Typography>{row.mandates}</Typography>
-              </TableCell>
-              <TableCell sx={{ width: "33%" }}>
-                <OutlinedInput
-                  type="number"
-                  placeholder={row.percentage.toString()}
-                  endAdornment={
-                    <InputAdornment position="end">%</InputAdornment>
-                  }
-                  error={error}
-                  onChange={(e) =>
-                    handleInputChange(
-                      row.id,
-                      "percentage",
-                      Number(e.target.value)
-                    )
-                  }
-                />
-              </TableCell>
+    <Box
+      sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}
+    >
+      <Typography variant="h6" sx={{ marginBottom: "16px" }}>
+        Fennmaradó: {100 - sum}%
+      </Typography>
+      <TableContainer
+        component={Paper}
+        sx={{ maxWidth: "430px", width: "100%" }}
+      >
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>Pártnév</TableCell>
+              <TableCell>Mandátum</TableCell>
+              <TableCell>Százalék</TableCell>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+          </TableHead>
+          <TableBody>
+            {data.map((row) => (
+              <TableRow key={row.id}>
+                <TableCell sx={{ width: "33%" }}>
+                  <Typography>{row.name}</Typography>
+                </TableCell>
+                <TableCell sx={{ width: "33%" }}>
+                  <Typography>{row.mandates}</Typography>
+                </TableCell>
+                <TableCell sx={{ width: "33%" }}>
+                  <OutlinedInput
+                    type="number"
+                    placeholder={row.percentage.toString()}
+                    endAdornment={
+                      <InputAdornment position="end">%</InputAdornment>
+                    }
+                    error={error}
+                    onChange={(e) =>
+                      handleInputChange(
+                        row.id,
+                        "percentage",
+                        Number(e.target.value)
+                      )
+                    }
+                  />
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </Box>
   );
 };

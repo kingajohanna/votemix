@@ -8,7 +8,8 @@ export function calculateMandates(
 
   partyData.forEach((party) => {
     for (let i = 1; i <= totalMandates; i++) {
-      quotients.push({ name: party.name, quotient: party.percentage / i });
+      if (party.percentage >= 5)
+        quotients.push({ name: party.name, quotient: party.percentage / i });
     }
   });
 
