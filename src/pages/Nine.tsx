@@ -95,6 +95,7 @@ export const Nine = () => {
       title: {
         text: "Százalék",
       },
+      max: 100,
     },
     legend: {
       enabled: false,

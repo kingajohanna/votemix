@@ -88,6 +88,7 @@ export const Twelve = () => {
       title: {
         text: "Százalék",
       },
+      max: 100,
     },
     legend: {
       enabled: false,

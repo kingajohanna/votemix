@@ -1,3 +1,4 @@
+import { Box, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 
 interface TimeLeft {
@@ -42,7 +43,7 @@ const Countdown: React.FC = () => {
   Object.keys(timeLeft).forEach((interval) => {
     if (timeLeft[interval as keyof TimeLeft] !== undefined) {
       timerComponents.push(
-        <span style={{ fontSize: "18px", fontWeight: 800 }} key={interval}>
+        <span style={{ fontSize: "16px" }} key={interval}>
           {timeLeft[interval as keyof TimeLeft]} {interval}{" "}
         </span>
       );
@@ -50,9 +51,21 @@ const Countdown: React.FC = () => {
   });
 
   return (
-    <div>
-      {timerComponents.length ? timerComponents : <span>Time's up!</span>}
-    </div>
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        marginBottom: "16px",
+      }}
+    >
+      <Typography variant="h6" gutterBottom>
+        A választásokig hátralévő idő:
+      </Typography>
+      <Box>
+        {timerComponents.length ? timerComponents : <span>Time's up!</span>}
+      </Box>
+    </Box>
   );
 };
 

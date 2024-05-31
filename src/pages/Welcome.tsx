@@ -1,6 +1,7 @@
-import { Box, Typography } from "@mui/material";
+import { Box } from "@mui/material";
 import Countdown from "../components/Countdown";
 import { Menu } from "../components/Menu";
+import { Participate } from "../components/Participate";
 
 export const Welcome = () => {
   return (
@@ -13,10 +14,9 @@ export const Welcome = () => {
           alignItems: "center",
         }}
       >
-        <Typography variant="body1" gutterBottom>
-          A választásokig hátralévő idő:
-        </Typography>
         <Countdown />
+
+        <Participate />
       </Box>
     </Menu>
   );
