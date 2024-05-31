@@ -12,20 +12,20 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 
-export interface PartyData {
+export interface PersonData {
   id: number;
   name: string;
+  party: string;
   percentage: number;
-  mandates: number;
   color: string;
 }
 
 interface EditableTableProps {
-  data: PartyData[];
+  data: PersonData[];
   setData: Function;
 }
 
-export const EditableTable: React.FC<EditableTableProps> = ({
+export const EditablePersonTable: React.FC<EditableTableProps> = ({
   data,
   setData,
 }) => {
@@ -33,7 +33,7 @@ export const EditableTable: React.FC<EditableTableProps> = ({
 
   const handleInputChange = (
     id: number,
-    field: keyof PartyData,
+    field: keyof PersonData,
     value: number
   ) => {
     let sum = 0;
@@ -52,7 +52,7 @@ export const EditableTable: React.FC<EditableTableProps> = ({
     }
   };
 
-  const reorderRows = (newData: PartyData[]) => {
+  const reorderRows = (newData: PersonData[]) => {
     newData.sort((a, b) => b.percentage - a.percentage);
   };
 
@@ -61,8 +61,8 @@ export const EditableTable: React.FC<EditableTableProps> = ({
       <Table>
         <TableHead>
           <TableRow>
+            <TableCell>Jelölt</TableCell>
             <TableCell>Pártnév</TableCell>
-            <TableCell>Mandátum</TableCell>
             <TableCell>Százalék</TableCell>
           </TableRow>
         </TableHead>
@@ -73,7 +73,7 @@ export const EditableTable: React.FC<EditableTableProps> = ({
                 <Typography>{row.name}</Typography>
               </TableCell>
               <TableCell sx={{ width: "33%" }}>
-                <Typography>{row.mandates}</Typography>
+                <Typography>{row.party}</Typography>
               </TableCell>
               <TableCell sx={{ width: "33%" }}>
                 <OutlinedInput

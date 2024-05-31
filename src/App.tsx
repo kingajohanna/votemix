@@ -5,7 +5,7 @@ import { ProtectedRoute } from "./components/ProtectedRoute";
 import Login from "./pages/Login";
 import { Welcome } from "./pages/Welcome";
 import { EuropeanParliament } from "./pages/EuropeanParliament";
-import { Mayor } from "./pages/Major";
+import { Mayor } from "./pages/Mayor";
 import { Twelve } from "./pages/Twelve";
 import { Nine } from "./pages/Nine";
 import { BudapestList } from "./pages/BudapestList";

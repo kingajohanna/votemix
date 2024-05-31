@@ -14,35 +14,35 @@ import Highcharts from "highcharts";
 const initalData: PersonData[] = [
   {
     id: 1,
-    name: "Fonti Krisztina",
+    name: "Szentkirályi Alexandra",
     percentage: 0,
-    party: "Fidesz-KDNP",
     color: "#F58D42",
+    party: "Fidesz-KDNP",
   },
   {
     id: 2,
-    name: "Kovács Gergely",
+    name: "Karácsony Gergely",
     percentage: 0,
-    party: "MKKP",
-    color: "#da0000",
+    party: "DK–MSZP–Párbeszéd",
+    color: "#1063a9",
   },
   {
     id: 3,
-    name: "Binder Csaba",
+    name: "Vitézy Dávid",
+    percentage: 0,
+    party: "VDBP-LMP",
+    color: "#A0CDFF",
+  },
+  {
+    id: 4,
+    name: "Grundtner András",
     percentage: 0,
     party: "Mi Hazánk",
     color: "#6a8c1c",
   },
-  {
-    id: 4,
-    name: "Dr. Vincze Géza",
-    percentage: 0,
-    party: "Szol-LP7-HPE",
-    color: "#505761",
-  },
 ];
 
-export const Twelve = () => {
+export const Mayor = () => {
   const [username, _] = useLocalStorage("username");
   const [data, setData] = useState(initalData);
 
@@ -51,8 +51,8 @@ export const Twelve = () => {
       const docRef = doc(db, "votemix", username);
       const docSnap = await getDoc(docRef);
       if (docSnap.exists()) {
-        if (docSnap.data().twelve?.length > 0) {
-          setData(docSnap.data().twelve);
+        if (docSnap.data().mayor?.length > 0) {
+          setData(docSnap.data().mayor);
         } else {
           setData(initalData);
         }
@@ -132,7 +132,7 @@ export const Twelve = () => {
   }, [data]);
 
   return (
-    <Menu title="12. kerület">
+    <Menu title="Főpolgármester választás">
       <Box
         sx={{
           display: "flex",
@@ -152,7 +152,7 @@ export const Twelve = () => {
           setData={(value: PersonData[]) => {
             setData(value);
             const userRef = doc(db, "votemix", username);
-            setDoc(userRef, { twelve: value }, { merge: true });
+            setDoc(userRef, { mayor: value }, { merge: true });
           }}
         />
       </Box>

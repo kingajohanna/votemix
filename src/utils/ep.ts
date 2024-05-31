@@ -4,7 +4,7 @@ export function calculateMandates(
   partyData: PartyData[],
   totalMandates: number
 ): PartyData[] {
-  let quotients: { name: string; quotient: number }[] = [];
+  const quotients: { name: string; quotient: number }[] = [];
 
   partyData.forEach((party) => {
     for (let i = 1; i <= totalMandates; i++) {

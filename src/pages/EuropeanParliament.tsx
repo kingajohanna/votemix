@@ -13,7 +13,7 @@ import { calculateMandates } from "../utils/ep";
 itemSeries(Highcharts);
 
 const initalData: PartyData[] = [
-  { id: 1, name: "Fidesz", percentage: 0, mandates: 0, color: "#F58D42" },
+  { id: 1, name: "Fidesz-KDNP", percentage: 0, mandates: 0, color: "#F58D42" },
   {
     id: 2,
     name: "Tisza Párt",
@@ -66,10 +66,11 @@ export const EuropeanParliament = () => {
       const docRef = doc(db, "votemix", username);
       const docSnap = await getDoc(docRef);
       if (docSnap.exists()) {
-        if (docSnap.data().ep.length === 0) {
+        if (docSnap.data().ep?.length > 0) {
+          setData(docSnap.data().ep);
+        } else {
           setData(initalData);
         }
-        setData(docSnap.data().ep);
       }
     };
 
