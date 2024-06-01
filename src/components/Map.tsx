@@ -26,6 +26,7 @@ export const Map: React.FC<MapProps> = ({ percentage }) => {
           position: "relative",
           overflow: "hidden",
           zIndex: 0,
+          backgroundColor: "#bdbfbd",
         }}
       >
         <Box sx={{ height: "33%", backgroundColor: "#d91a1a" }} />
