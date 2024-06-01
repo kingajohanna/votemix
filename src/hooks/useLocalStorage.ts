@@ -9,24 +9,24 @@ export const useLocalStorage = (keyName: string, defaultValue?: any) => {
       } else {
         window.localStorage.setItem(
           keyName,
-          JSON.stringify(defaultValue.toLowerCase())
+          JSON.stringify(defaultValue?.toLowerCase())
         );
-        return defaultValue.toLowerCase();
+        return defaultValue?.toLowerCase();
       }
     } catch (err) {
-      return defaultValue.toLowerCase();
+      return defaultValue?.toLowerCase();
     }
   });
   const setValue = (newValue: any) => {
     try {
       window.localStorage.setItem(
         keyName,
-        JSON.stringify(newValue.toLowerCase())
+        JSON.stringify(newValue?.toLowerCase())
       );
     } catch (err) {
       console.log(err);
     }
-    setStoredValue(newValue.toLowerCase());
+    setStoredValue(newValue?.toLowerCase());
   };
   return [storedValue, setValue];
 };
