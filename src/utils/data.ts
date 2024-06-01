@@ -145,8 +145,11 @@ export const initialBpList: PartyData[] = [
     name: "VDBP-LMP",
     percentage: 0,
     mandates: 0,
-    color: "#7dc340",
-    icon: ["https://vtr.valasztas.hu/kepek/6/7/Kep-14467.JPG"],
+    color: "#A0CDFF",
+    icon: [
+      "https://vtr.valasztas.hu/kepek/0/9/Kep-14709.JPG",
+      "https://vtr.valasztas.hu/kepek/6/7/Kep-14467.JPG",
+    ],
   },
   {
     id: 6,
@@ -186,7 +189,11 @@ export const initialBpList: PartyData[] = [
     percentage: 0,
     mandates: 0,
     color: "#505761",
-    icon: ["https://vtr.valasztas.hu/kepek/8/8/Kep-14888.JPG"],
+    icon: [
+      "https://vtr.valasztas.hu/kepek/0/0/Kep-14600.JPG",
+      "https://vtr.valasztas.hu/kepek/8/8/Kep-14888.JPG",
+      "https://vtr.valasztas.hu/kepek/1/0/Kep-14910.JPG",
+    ],
   },
 ];
 
@@ -220,7 +227,10 @@ export const initialMayor: PersonData[] = [
     percentage: 0,
     party: "VDBP-LMP",
     color: "#A0CDFF",
-    icon: ["https://vtr.valasztas.hu/kepek/6/7/Kep-14467.JPG"],
+    icon: [
+      "https://vtr.valasztas.hu/kepek/0/9/Kep-14709.JPG",
+      "https://vtr.valasztas.hu/kepek/6/7/Kep-14467.JPG",
+    ],
   },
   {
     id: 4,
@@ -276,7 +286,11 @@ export const initialNine: PersonData[] = [
     percentage: 0,
     party: "Szol-LP7-HPE",
     color: "#505761",
-    icon: ["https://vtr.valasztas.hu/kepek/8/8/Kep-14888.JPG"],
+    icon: [
+      "https://vtr.valasztas.hu/kepek/0/0/Kep-14600.JPG",
+      "https://vtr.valasztas.hu/kepek/8/8/Kep-14888.JPG",
+      "https://vtr.valasztas.hu/kepek/1/0/Kep-14910.JPG",
+    ],
   },
 ];
 
@@ -315,6 +329,10 @@ export const initialTwelve: PersonData[] = [
     percentage: 0,
     party: "Szol-LP7-HPE",
     color: "#505761",
-    icon: ["https://vtr.valasztas.hu/kepek/8/8/Kep-14888.JPG"],
+    icon: [
+      "https://vtr.valasztas.hu/kepek/0/0/Kep-14600.JPG",
+      "https://vtr.valasztas.hu/kepek/8/8/Kep-14888.JPG",
+      "https://vtr.valasztas.hu/kepek/1/0/Kep-14910.JPG",
+    ],
   },
 ];

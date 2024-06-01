@@ -262,7 +262,10 @@ export const Admin = () => {
 
       <TableContainer component={Paper}>
         <Table
-          style={{ tableLayout: "fixed", maxWidth: "100%" }}
+          sx={{
+            tableLayout: "fixed",
+            maxWidth: "100%",
+          }}
           aria-label="simple table"
         >
           <TableHead>
