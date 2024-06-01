@@ -204,13 +204,20 @@ export const Admin = () => {
 
   return (
     <Box
-      sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+      }}
     >
       <Typography variant="h4" align="center" gutterBottom>
         Játékosok
       </Typography>
       <TableContainer component={Paper}>
-        <Table style={{ tableLayout: "fixed" }} aria-label="simple table">
+        <Table
+          style={{ tableLayout: "fixed", maxWidth: "100%" }}
+          aria-label="simple table"
+        >
           <TableHead>
             <TableRow>
               <TableCell>Felhasználónév</TableCell>
@@ -254,7 +261,10 @@ export const Admin = () => {
       </Typography>
 
       <TableContainer component={Paper}>
-        <Table style={{ tableLayout: "fixed" }} aria-label="simple table">
+        <Table
+          style={{ tableLayout: "fixed", maxWidth: "100%" }}
+          aria-label="simple table"
+        >
           <TableHead>
             <TableRow>
               <TableCell>Felhasználónév</TableCell>

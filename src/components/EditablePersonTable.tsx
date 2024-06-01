@@ -20,6 +20,7 @@ export interface PersonData {
   party: string;
   percentage: number;
   color: string;
+  icon: string[];
 }
 
 interface EditableTableProps {
@@ -93,6 +94,7 @@ export const EditablePersonTable: React.FC<EditableTableProps> = ({
         <Table style={{ tableLayout: "fixed" }}>
           <TableHead>
             <TableRow>
+              <TableCell></TableCell>
               <TableCell>Jelölt</TableCell>
               <TableCell>Pártnév</TableCell>
               <TableCell>Százalék</TableCell>
@@ -101,6 +103,24 @@ export const EditablePersonTable: React.FC<EditableTableProps> = ({
           <TableBody>
             {data.map((row) => (
               <TableRow key={row.id}>
+                <TableCell>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                    }}
+                  >
+                    {row.icon?.map((icon, index) => (
+                      <img
+                        key={index}
+                        src={icon}
+                        alt="icon"
+                        style={{ width: "60px" }}
+                      />
+                    ))}
+                  </Box>
+                </TableCell>
                 <TableCell>
                   <Typography>{row.name}</Typography>
                 </TableCell>
