@@ -56,7 +56,6 @@ export const Twelve = () => {
             })),
           });
       });
-      console.log(final);
 
       setGuesses(guesses);
     };
@@ -124,8 +123,6 @@ export const Twelve = () => {
 
   useEffect(() => {
     if (isVoteDisabled() && final?.data && final.data.length > 0) {
-      console.log(final.data);
-
       setOptions({
         ...options,
         series: [

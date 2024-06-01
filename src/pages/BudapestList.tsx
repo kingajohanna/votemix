@@ -108,16 +108,6 @@ export const BudapestList = () => {
 
   useEffect(() => {
     if (isVoteDisabled() && final?.data && final.data.length > 0) {
-      console.log(
-        final.data.map((row) => [
-          row.name,
-          row.percentage,
-          row.color || "#a6a4a4",
-          row.name,
-        ])
-      );
-      console.log(getData());
-
       setOptions({
         ...options,
         series: [

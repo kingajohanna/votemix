@@ -121,7 +121,12 @@ export const EditableTable: React.FC<EditableTableProps> = ({
                     }}
                     type="number"
                     onKeyDown={(e) => {
-                      if (!/^[0-9]+$/.test(e.key)) {
+                      if (
+                        !/^[0-9]+$/.test(e.key) &&
+                        e.key !== "Backspace" &&
+                        e.key !== "ArrowLeft" &&
+                        e.key !== "ArrowRight"
+                      ) {
                         e.preventDefault();
                       }
                     }}

@@ -124,7 +124,12 @@ export const EditablePersonTable: React.FC<EditableTableProps> = ({
                       <InputAdornment position="end">%</InputAdornment>
                     }
                     onKeyDown={(e) => {
-                      if (!/^[0-9]+$/.test(e.key)) {
+                      if (
+                        !/^[0-9]+$/.test(e.key) &&
+                        e.key !== "Backspace" &&
+                        e.key !== "ArrowLeft" &&
+                        e.key !== "ArrowRight"
+                      ) {
                         e.preventDefault();
                       }
                     }}

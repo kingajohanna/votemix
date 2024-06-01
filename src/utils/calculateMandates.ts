@@ -19,7 +19,7 @@ export function calculateMandates(
   partyData.forEach((party) => (allocation[party.name] = 0));
 
   for (let i = 0; i < totalMandates; i++) {
-    allocation[quotients[i].name]++;
+    allocation[quotients[i]?.name]++;
   }
 
   return partyData.map((party) => ({

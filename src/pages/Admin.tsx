@@ -5,6 +5,7 @@ import { collection, doc, getDoc, getDocs, setDoc } from "firebase/firestore";
 import { db } from "../App";
 import {
   Box,
+  Button,
   InputAdornment,
   OutlinedInput,
   Paper,
@@ -21,6 +22,7 @@ import {
   initialBpList,
   initialEP,
   initialMayor,
+  initialNine,
   initialTwelve,
 } from "../utils/data";
 import { calculateMandates } from "../utils/calculateMandates";
@@ -28,6 +30,11 @@ import {
   EditablePersonTable,
   PersonData,
 } from "../components/EditablePersonTable";
+import {
+  calculateParticipationPoints,
+  mandatesCalculatePoints,
+  personalCalculatePoints,
+} from "../utils/calculatePoints";
 
 interface User {
   username: string;
@@ -38,13 +45,24 @@ interface User {
   budapestList: boolean;
 }
 
+interface Points {
+  username: string;
+  ep: number;
+  mayor: number;
+  twelve: number;
+  nine: number;
+  budapestList: number;
+  participation: number;
+}
+
 export const Admin = () => {
   const [username, _] = useLocalStorage("username");
   const [users, setUsers] = useState<User[]>([]);
+  const [points, setPoints] = useState<Points[]>([]);
   const [ep, setEp] = useState(initialEP);
   const [mayor, setMayor] = useState(initialMayor);
   const [twelve, setTwelve] = useState(initialTwelve);
-  // const [nine, setNine] = useState(initialNine);
+  const [nine, setNine] = useState(initialNine);
   const [bpList, setBpList] = useState(initialBpList);
   const [participation, setParticipation] = useState(0);
 
@@ -57,6 +75,10 @@ export const Admin = () => {
     const fetchData = async () => {
       const users = await getUsers();
       setUsers(users);
+
+      const points = await getPoints();
+      setPoints(points);
+
       await getVoteData();
     };
 
@@ -71,9 +93,9 @@ export const Admin = () => {
       if (docSnap.data().budapestlist?.length > 0)
         setBpList(docSnap.data().budapestlist);
       if (docSnap.data().mayor?.length > 0) setMayor(docSnap.data().mayor);
-      // if (docSnap.data().nine?.length > 0) setNine(docSnap.data().nine);
+      if (docSnap.data().nine?.length > 0) setNine(docSnap.data().nine);
       if (docSnap.data().twelve?.length > 0) setTwelve(docSnap.data().twelve);
-      if (docSnap.data().participation?.length > 0)
+      if (docSnap.data().participation)
         setParticipation(docSnap.data().participation);
     }
   };
@@ -95,8 +117,95 @@ export const Admin = () => {
     return users;
   };
 
+  const getUserGuesses = async (username: string) => {
+    const docRef = doc(db, "votemix", username);
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      return docSnap.data();
+    }
+    return {};
+  };
+
+  const getPoints = async () => {
+    const querySnapshot = await getDocs(collection(db, "votemix"));
+    let points: Points[] = [];
+    querySnapshot.forEach((doc) => {
+      if (doc.id !== "admin")
+        points.push({
+          username: doc.id,
+          ep: doc.data().points.ep,
+          mayor: doc.data().points.mayor,
+          twelve: doc.data().points.twelve,
+          nine: doc.data().points.nine,
+          budapestList: doc.data().points.budapestList,
+          participation: doc.data().participation,
+        });
+    });
+    return points;
+  };
+
+  const personToGuessData = (person: PersonData[]) => {
+    return person.map((p) => ({
+      name: p.name,
+      percentage: p.percentage,
+      color: p.color,
+      mandates: 0,
+    }));
+  };
+
+  const calculatePoints = async () => {
+    let newPoints: Points[] = [];
+    await Promise.all(
+      users.map(async (user) => {
+        const userPoints: Points = {
+          username: user.username,
+          ep: 0,
+          mayor: 0,
+          twelve: 0,
+          nine: 0,
+          budapestList: 0,
+          participation: 0,
+        };
+        const userGuesses = await getUserGuesses(user.username);
+        userPoints.ep = mandatesCalculatePoints(
+          userGuesses.ep.slice(),
+          ep.slice()
+        );
+        userPoints.mayor = personalCalculatePoints(
+          userGuesses.mayor,
+          personToGuessData(mayor.slice())
+        );
+        userPoints.twelve = personalCalculatePoints(
+          userGuesses.twelve,
+          personToGuessData(twelve.slice())
+        );
+        userPoints.nine = personalCalculatePoints(
+          userGuesses.nine,
+          personToGuessData(nine.slice())
+        );
+        userPoints.budapestList = mandatesCalculatePoints(
+          userGuesses.budapestlist,
+          bpList.slice()
+        );
+
+        userPoints.participation = calculateParticipationPoints(
+          userGuesses.participation,
+          participation
+        );
+
+        const userRef = doc(db, "votemix", user.username);
+        setDoc(userRef, { points: userPoints }, { merge: true });
+
+        newPoints.push(userPoints);
+      })
+    );
+    setPoints(newPoints);
+  };
+
   return (
-    <Box>
+    <Box
+      sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}
+    >
       <Typography variant="h4" align="center" gutterBottom>
         Játékosok
       </Typography>
@@ -104,12 +213,13 @@ export const Admin = () => {
         <Table style={{ tableLayout: "fixed" }} aria-label="simple table">
           <TableHead>
             <TableRow>
-              <TableCell>Név</TableCell>
-              <TableCell align="center">EP</TableCell>
-              <TableCell align="center">Budapest List</TableCell>
-              <TableCell align="center">Mayor</TableCell>
-              <TableCell align="center">Twelve</TableCell>
-              <TableCell align="center">Nine</TableCell>
+              <TableCell>Felhasználónév</TableCell>
+              <TableCell align="center">Európai parlament</TableCell>
+              <TableCell align="center">Fővárosi közgyűlés</TableCell>
+              <TableCell align="center">Főpolgármester</TableCell>
+              <TableCell align="center">12. kerület</TableCell>
+              <TableCell align="center">9. kerület</TableCell>
+              <TableCell align="center">Részvétel</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -134,6 +244,66 @@ export const Admin = () => {
         </Table>
       </TableContainer>
 
+      <Typography
+        variant="h4"
+        align="center"
+        gutterBottom
+        sx={{ marginTop: "16px" }}
+      >
+        Eredmények
+      </Typography>
+
+      <TableContainer component={Paper}>
+        <Table style={{ tableLayout: "fixed" }} aria-label="simple table">
+          <TableHead>
+            <TableRow>
+              <TableCell>Felhasználónév</TableCell>
+              <TableCell align="center">Európai parlament</TableCell>
+              <TableCell align="center">Fővárosi közgyűlés</TableCell>
+              <TableCell align="center">Főpolgármester</TableCell>
+              <TableCell align="center">12. kerület</TableCell>
+              <TableCell align="center">9. kerület</TableCell>
+              <TableCell align="center">Részvétel</TableCell>
+              <TableCell align="center">Összesen</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {points.map((user) => (
+              <TableRow
+                key={user.username}
+                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+              >
+                <TableCell component="th" scope="row">
+                  {user.username}
+                </TableCell>
+                <TableCell align="center">{user.ep}</TableCell>
+                <TableCell align="center">{user.budapestList}</TableCell>
+                <TableCell align="center">{user.mayor}</TableCell>
+                <TableCell align="center">{user.twelve}</TableCell>
+                <TableCell align="center">{user.nine}</TableCell>
+                <TableCell align="center">{user.participation}</TableCell>
+                <TableCell align="center">
+                  {user.ep +
+                    user.budapestList +
+                    user.mayor +
+                    user.twelve +
+                    user.nine +
+                    user.participation}
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+
+      <Button
+        onClick={async () => await calculatePoints()}
+        variant="contained"
+        sx={{ marginTop: "16px" }}
+      >
+        Pontok kiszámítása
+      </Button>
+
       <Box
         sx={{
           marginTop: "16px",
@@ -151,7 +321,9 @@ export const Admin = () => {
           value={participation}
           endAdornment={<InputAdornment position="end">%</InputAdornment>}
           onChange={(e) => {
-            const newValue = parseFloat(e.target.value);
+            console.log(e.target.value);
+
+            const newValue = parseInt(e.target.value);
             setParticipation(newValue);
             const userRef = doc(db, "votemix", "admin");
             setDoc(userRef, { participation: newValue }, { merge: true });
@@ -264,7 +436,7 @@ export const Admin = () => {
           />
         </Box>
 
-        {/*<Box>
+        <Box>
           <Typography
             variant="h4"
             align="center"
@@ -280,9 +452,13 @@ export const Admin = () => {
               const userRef = doc(db, "votemix", "admin");
               setDoc(userRef, { nine: value }, { merge: true });
             }}
-            handleReset={() => setNine(initialNine)}
+            handleReset={() => {
+              setNine(initialNine);
+              const userRef = doc(db, "votemix", "admin");
+              setDoc(userRef, { nine: [] }, { merge: true });
+            }}
           />
-          </Box>*/}
+        </Box>
       </Box>
     </Box>
   );
