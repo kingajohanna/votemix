@@ -22,7 +22,7 @@ export default function Login() {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     const username = data.get("username") as string;
-    setUsername(username);
+    setUsername(username.toLocaleLowerCase());
     navigate("/welcome", { replace: true });
   };
 

@@ -12,7 +12,7 @@ export const Participate = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const docRef = doc(db, "votemix", username.toLowerCase());
+      const docRef = doc(db, "votemix", username);
       const docSnap = await getDoc(docRef);
       if (docSnap.exists()) {
         if (docSnap.data().participation) {
