@@ -13,6 +13,7 @@ import React from "react";
 interface GuessData {
   name: string;
   percentage: number;
+  color?: string;
 }
 
 export interface Guess {
@@ -35,7 +36,9 @@ export const Guesses: React.FC<GuessesProps> = ({ guesses }) => {
           <TableRow>
             <TableCell></TableCell>
             {sortedGuesses[0].data.map((row) => (
-              <TableCell align="center">{row.name}</TableCell>
+              <TableCell align="center" key={row.name}>
+                {row.name}
+              </TableCell>
             ))}
           </TableRow>
         </TableHead>
@@ -45,8 +48,8 @@ export const Guesses: React.FC<GuessesProps> = ({ guesses }) => {
               <TableCell align="center">
                 <Typography>{row.username}</Typography>
               </TableCell>
-              {row.data.map((cell) => (
-                <TableCell align="center">
+              {row.data.map((cell, index) => (
+                <TableCell align="center" key={index}>
                   <Typography>{cell.percentage}</Typography>
                 </TableCell>
               ))}

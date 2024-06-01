@@ -6,17 +6,20 @@ import { useEffect, useState } from "react";
 import { EditableTable, PartyData } from "../components/EditableTable";
 import { Box } from "@mui/material";
 import { db } from "../App";
-import { doc, getDoc, setDoc } from "firebase/firestore";
+import { collection, doc, getDoc, getDocs, setDoc } from "firebase/firestore";
 import { useLocalStorage } from "../hooks/useLocalStorage";
 import { calculateMandates } from "../utils/ep";
 import { initialEP } from "../utils/data";
+import { Guess, Guesses } from "../components/OtherGuess";
+import { isVoteDisabled } from "../utils/disable";
 
 itemSeries(Highcharts);
 
 export const EuropeanParliament = () => {
   const [username, _] = useLocalStorage("username");
   const [data, setData] = useState(initialEP);
-  //const [guesses, setGuesses] = useState<Guess[]>([]);
+  const [guesses, setGuesses] = useState<Guess[]>([]);
+  const [final, setFinal] = useState<Guess>();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -30,18 +33,30 @@ export const EuropeanParliament = () => {
         }
       }
 
-      /* const querySnapshot = await getDocs(collection(db, "votemix"));
+      const querySnapshot = await getDocs(collection(db, "votemix"));
+
       let guesses: Guess[] = [];
-      querySnapshot.forEach((doc) =>
-        guesses.push({
-          username: doc.id,
-          data: doc.data().ep.map((row: PartyData) => ({
-            name: row.name,
-            percentage: row.percentage,
-          })),
-        })
-      );
-      setGuesses(guesses); */
+
+      querySnapshot.forEach((doc) => {
+        if (doc.id !== "admin")
+          guesses.push({
+            username: doc.id,
+            data: doc.data().ep.map((row: PartyData) => ({
+              name: row.name,
+              percentage: row.percentage,
+            })),
+          });
+        else
+          setFinal({
+            username: doc.id,
+            data: doc.data().ep.map((row: PartyData) => ({
+              name: row.name,
+              color: row.color,
+              percentage: row.mandates,
+            })),
+          });
+      });
+      setGuesses(guesses);
     };
 
     fetchData();
@@ -92,16 +107,45 @@ export const EuropeanParliament = () => {
   });
 
   useEffect(() => {
-    setOptions({
-      ...options,
-      series: [
-        {
-          ...options.series[0],
-          data: getData(),
-        },
-      ],
-    });
-  }, [data]);
+    if (isVoteDisabled() && final) {
+      setOptions({
+        ...options,
+        series: [
+          {
+            ...options.series[0],
+            size: "100%",
+            data: final.data.map((row) => [
+              row.name,
+              row.percentage,
+              row.color || "#a6a4a4",
+              row.name,
+            ]),
+          },
+        ],
+      });
+    } else if (isVoteDisabled()) {
+      setOptions({
+        ...options,
+        series: [
+          {
+            ...options.series[0],
+            size: "100%",
+            data: [["no party", 21, "#a6a4a4", "no party"]],
+          },
+        ],
+      });
+    } else
+      setOptions({
+        ...options,
+        series: [
+          {
+            ...options.series[0],
+            size: "170%",
+            data: getData(),
+          },
+        ],
+      });
+  }, [data, final]);
 
   return (
     <Menu title="Európai Parlament">
@@ -114,7 +158,7 @@ export const EuropeanParliament = () => {
           containerProps={{ style: { width: "100%" } }}
           updateArgs={[true, true, true]}
         />
-        {data && (
+        {!isVoteDisabled() && data && (
           <EditableTable
             data={data}
             setData={(value: PartyData[]) => {
@@ -125,7 +169,10 @@ export const EuropeanParliament = () => {
             }}
           />
         )}
-        {/*guesses.length > 0 && <Guesses guesses={guesses} />*/}
+
+        {isVoteDisabled() && guesses.length > 0 && (
+          <Guesses guesses={guesses} />
+        )}
       </Box>
     </Menu>
   );
