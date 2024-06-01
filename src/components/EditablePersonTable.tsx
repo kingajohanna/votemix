@@ -70,7 +70,7 @@ export const EditablePersonTable: React.FC<EditableTableProps> = ({
         component={Paper}
         sx={{ maxWidth: "430px", width: "100%" }}
       >
-        <Table>
+        <Table style={{ tableLayout: "fixed" }}>
           <TableHead>
             <TableRow>
               <TableCell>Jelölt</TableCell>
@@ -81,13 +81,13 @@ export const EditablePersonTable: React.FC<EditableTableProps> = ({
           <TableBody>
             {data.map((row) => (
               <TableRow key={row.id}>
-                <TableCell sx={{ width: "33%" }}>
+                <TableCell>
                   <Typography>{row.name}</Typography>
                 </TableCell>
-                <TableCell sx={{ width: "33%" }}>
+                <TableCell>
                   <Typography>{row.party}</Typography>
                 </TableCell>
-                <TableCell sx={{ width: "33%" }}>
+                <TableCell>
                   <OutlinedInput
                     type="number"
                     placeholder={row.percentage.toString()}

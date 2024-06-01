@@ -1,10 +1,17 @@
 import { Box, Button, TextField, Typography } from "@mui/material";
 import { useLocalStorage } from "../hooks/useLocalStorage";
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 export const Protection = () => {
-  const [_, setAuthenticated] = useLocalStorage("authenticated");
+  const [authenticated, setAuthenticated] = useLocalStorage("authenticated");
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (authenticated) {
+      navigate("/login", { replace: true });
+    }
+  }, []);
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();

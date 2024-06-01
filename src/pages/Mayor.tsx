@@ -10,41 +10,11 @@ import {
 } from "../components/EditablePersonTable";
 import HighchartsReact from "highcharts-react-official";
 import Highcharts from "highcharts";
-
-const initalData: PersonData[] = [
-  {
-    id: 1,
-    name: "Szentkirályi Alexandra",
-    percentage: 0,
-    color: "#F58D42",
-    party: "Fidesz-KDNP",
-  },
-  {
-    id: 2,
-    name: "Karácsony Gergely",
-    percentage: 0,
-    party: "DK–MSZP–Párbeszéd",
-    color: "#1063a9",
-  },
-  {
-    id: 3,
-    name: "Vitézy Dávid",
-    percentage: 0,
-    party: "VDBP-LMP",
-    color: "#A0CDFF",
-  },
-  {
-    id: 4,
-    name: "Grundtner András",
-    percentage: 0,
-    party: "Mi Hazánk",
-    color: "#6a8c1c",
-  },
-];
+import { initialMayor } from "../utils/data";
 
 export const Mayor = () => {
   const [username, _] = useLocalStorage("username");
-  const [data, setData] = useState(initalData);
+  const [data, setData] = useState(initialMayor);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -54,7 +24,7 @@ export const Mayor = () => {
         if (docSnap.data().mayor?.length > 0) {
           setData(docSnap.data().mayor);
         } else {
-          setData(initalData);
+          setData(initialMayor);
         }
       }
     };

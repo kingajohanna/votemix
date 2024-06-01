@@ -1,7 +1,4 @@
 import {
-  Box,
-  InputAdornment,
-  OutlinedInput,
   Paper,
   Table,
   TableBody,
@@ -11,7 +8,7 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-import React, { useState } from "react";
+import React from "react";
 
 interface GuessData {
   name: string;

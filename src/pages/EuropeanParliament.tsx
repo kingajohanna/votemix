@@ -9,57 +9,13 @@ import { db } from "../App";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { useLocalStorage } from "../hooks/useLocalStorage";
 import { calculateMandates } from "../utils/ep";
+import { initialEP } from "../utils/data";
 
 itemSeries(Highcharts);
 
-const initalData: PartyData[] = [
-  { id: 1, name: "Fidesz-KDNP", percentage: 0, mandates: 0, color: "#F58D42" },
-  {
-    id: 2,
-    name: "Tisza Párt",
-    percentage: 0,
-    mandates: 0,
-    color: "#E56750",
-  },
-  {
-    id: 3,
-    name: "DK–MSZP–Párbeszéd",
-    percentage: 0,
-    mandates: 0,
-    color: "#1063a9",
-  },
-  {
-    id: 4,
-    name: "Mi Hazánk",
-    percentage: 0,
-    mandates: 0,
-    color: "#6a8c1c",
-  },
-  { id: 5, name: "Momentum", percentage: 0, mandates: 0, color: "#9069d4" },
-  { id: 6, name: "MKKP", percentage: 0, mandates: 0, color: "#da0000" },
-  {
-    id: 9,
-    name: "Mindenki Magyarországa Néppárt",
-    percentage: 0,
-    mandates: 0,
-    color: "#011166",
-  },
-  { id: 7, name: "Jobbik", percentage: 0, mandates: 0, color: "#111" },
-  {
-    id: 8,
-    name: "Második Reformkor",
-    percentage: 0,
-    mandates: 0,
-    color: "#f2db7d",
-  },
-
-  { id: 10, name: "LMP", percentage: 0, mandates: 0, color: "#7dc340" },
-  { id: 11, name: "MEMO", percentage: 0, mandates: 0, color: "#e51e25" },
-];
-
 export const EuropeanParliament = () => {
   const [username, _] = useLocalStorage("username");
-  const [data, setData] = useState(initalData);
+  const [data, setData] = useState(initialEP);
   //const [guesses, setGuesses] = useState<Guess[]>([]);
 
   useEffect(() => {
@@ -70,7 +26,7 @@ export const EuropeanParliament = () => {
         if (docSnap.data().ep?.length > 0) {
           setData(docSnap.data().ep);
         } else {
-          setData(initalData);
+          setData(initialEP);
         }
       }
 

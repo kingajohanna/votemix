@@ -10,6 +10,8 @@ import { Twelve } from "./pages/Twelve";
 import { Nine } from "./pages/Nine";
 import { BudapestList } from "./pages/BudapestList";
 import { getFirestore } from "firebase/firestore";
+import { Admin } from "./pages/Admin";
+import { getAnalytics } from "firebase/analytics";
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_API_KEY,
@@ -22,6 +24,7 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
+export const analytics = getAnalytics(app);
 export const db = getFirestore(app);
 
 export default function App() {
@@ -83,6 +86,14 @@ export default function App() {
       element: (
         <ProtectedRoute>
           <BudapestList />
+        </ProtectedRoute>
+      ),
+    },
+    {
+      path: "/admin",
+      element: (
+        <ProtectedRoute>
+          <Admin />
         </ProtectedRoute>
       ),
     },

@@ -24,11 +24,13 @@ export interface PartyData {
 interface EditableTableProps {
   data: PartyData[];
   setData: Function;
+  fullscreen?: boolean;
 }
 
 export const EditableTable: React.FC<EditableTableProps> = ({
   data,
   setData,
+  fullscreen,
 }) => {
   const [error, setError] = useState(false);
   let sum = 0;
@@ -68,9 +70,9 @@ export const EditableTable: React.FC<EditableTableProps> = ({
       </Typography>
       <TableContainer
         component={Paper}
-        sx={{ maxWidth: "430px", width: "100%" }}
+        sx={{ maxWidth: fullscreen ? "100%" : "430px", width: "100%" }}
       >
-        <Table>
+        <Table style={{ tableLayout: "fixed" }}>
           <TableHead>
             <TableRow>
               <TableCell>Pártnév</TableCell>
@@ -81,13 +83,13 @@ export const EditableTable: React.FC<EditableTableProps> = ({
           <TableBody>
             {data.map((row) => (
               <TableRow key={row.id}>
-                <TableCell sx={{ width: "33%" }}>
+                <TableCell>
                   <Typography>{row.name}</Typography>
                 </TableCell>
-                <TableCell sx={{ width: "33%" }}>
+                <TableCell>
                   <Typography>{row.mandates}</Typography>
                 </TableCell>
-                <TableCell sx={{ width: "33%" }}>
+                <TableCell>
                   <OutlinedInput
                     type="number"
                     placeholder={row.percentage.toString()}

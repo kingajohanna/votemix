@@ -9,8 +9,15 @@ import { useLocalStorage } from "../hooks/useLocalStorage";
 import { useNavigate } from "react-router-dom";
 
 export default function Login() {
-  const [_, setUsername] = useLocalStorage("username");
+  const [username, setUsername] = useLocalStorage("username");
   const navigate = useNavigate();
+
+  React.useEffect(() => {
+    if (username) {
+      navigate("/welcome", { replace: true });
+    }
+  }, []);
+
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);

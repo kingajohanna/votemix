@@ -3,6 +3,7 @@ import { doc, getDoc, setDoc } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { db } from "../App";
 import { useLocalStorage } from "../hooks/useLocalStorage";
+import { Map } from "./Map";
 
 export const Participate = () => {
   const [username, _] = useLocalStorage("username");
@@ -30,6 +31,7 @@ export const Participate = () => {
       <Typography variant="h6" gutterBottom>
         Részvételi arány
       </Typography>
+      <Map percentage={value} />
       <OutlinedInput
         type="number"
         placeholder={value.toString()}

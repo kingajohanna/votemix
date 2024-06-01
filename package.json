@@ -17,6 +17,7 @@
     "@emotion/styled": "^11.11.5",
     "@mui/icons-material": "^5.15.19",
     "@mui/material": "^5.15.19",
+    "d3": "^7.9.0",
     "dotenv": "^16.4.5",
     "firebase": "^10.12.2",
     "highcharts": "^11.4.3",
@@ -27,6 +28,8 @@
     "react-router-dom": "^6.23.1"
   },
   "devDependencies": {
+    "@types/d3": "^7.4.3",
+    "@types/d3-geo": "^3.1.0",
     "@types/react": "^18.2.66",
     "@types/react-dom": "^18.2.22",
     "@typescript-eslint/eslint-plugin": "^7.2.0",

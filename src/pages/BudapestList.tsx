@@ -8,59 +8,11 @@ import { calculateMandates } from "../utils/ep";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { db } from "../App";
 import { useLocalStorage } from "../hooks/useLocalStorage";
-
-const initalData: PartyData[] = [
-  { id: 1, name: "Fidesz-KDNP", percentage: 0, mandates: 0, color: "#F58D42" },
-  {
-    id: 2,
-    name: "Tisza Párt",
-    percentage: 0,
-    mandates: 0,
-    color: "#E56750",
-  },
-  {
-    id: 3,
-    name: "DK–MSZP–Párbeszéd",
-    percentage: 0,
-    mandates: 0,
-    color: "#1063a9",
-  },
-  { id: 4, name: "VDBP-LMP", percentage: 0, mandates: 0, color: "#7dc340" },
-  {
-    id: 5,
-    name: "Mi Hazánk",
-    percentage: 0,
-    mandates: 0,
-    color: "#6a8c1c",
-  },
-  { id: 6, name: "Momentum", percentage: 0, mandates: 0, color: "#9069d4" },
-  { id: 7, name: "MKKP", percentage: 0, mandates: 0, color: "#da0000" },
-  {
-    id: 8,
-    name: "Nép Pártján",
-    percentage: 0,
-    mandates: 0,
-    color: "#023756",
-  },
-  {
-    id: 9,
-    name: "Munkáspárt",
-    percentage: 0,
-    mandates: 0,
-    color: "#c5161d",
-  },
-  {
-    id: 10,
-    name: "Szolidaritás-Lokálpatrióták7-Helló Pesterzsébetiek",
-    percentage: 0,
-    mandates: 0,
-    color: "#505761",
-  },
-];
+import { initialBpList } from "../utils/data";
 
 export const BudapestList = () => {
   const [username, _] = useLocalStorage("username");
-  const [data, setData] = useState(initalData);
+  const [data, setData] = useState(initialBpList);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -70,7 +22,7 @@ export const BudapestList = () => {
         if (docSnap.data().budapestlist?.length > 0) {
           setData(docSnap.data().budapestlist);
         } else {
-          setData(initalData);
+          setData(initialBpList);
         }
       }
     };
