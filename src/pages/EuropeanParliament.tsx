@@ -23,7 +23,7 @@ export const EuropeanParliament = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const docRef = doc(db, "votemix", username);
+      const docRef = doc(db, "votemix", username.toLowerCase());
       const docSnap = await getDoc(docRef);
       if (docSnap.exists()) {
         if (docSnap.data().ep?.length > 0) {

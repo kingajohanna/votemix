@@ -16,7 +16,6 @@ export const Protection = () => {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log(import.meta.env.VITE_PASSWORD);
 
     if (data.get("password") === import.meta.env.VITE_PASSWORD) {
       setAuthenticated(true);

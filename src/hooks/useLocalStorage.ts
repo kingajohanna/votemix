@@ -7,26 +7,20 @@ export const useLocalStorage = (keyName: string, defaultValue?: any) => {
       if (value) {
         return JSON.parse(value);
       } else {
-        window.localStorage.setItem(
-          keyName,
-          JSON.stringify(defaultValue?.toLowerCase())
-        );
-        return defaultValue?.toLowerCase();
+        window.localStorage.setItem(keyName, JSON.stringify(defaultValue));
+        return defaultValue;
       }
     } catch (err) {
-      return defaultValue?.toLowerCase();
+      return defaultValue;
     }
   });
   const setValue = (newValue: any) => {
     try {
-      window.localStorage.setItem(
-        keyName,
-        JSON.stringify(newValue?.toLowerCase())
-      );
+      window.localStorage.setItem(keyName, JSON.stringify(newValue));
     } catch (err) {
       console.log(err);
     }
-    setStoredValue(newValue?.toLowerCase());
+    setStoredValue(newValue);
   };
   return [storedValue, setValue];
 };
