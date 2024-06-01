@@ -1,5 +1,6 @@
 import {
   Box,
+  Button,
   InputAdornment,
   OutlinedInput,
   Paper,
@@ -25,12 +26,14 @@ interface EditableTableProps {
   data: PartyData[];
   setData: Function;
   fullscreen?: boolean;
+  handleReset: () => void;
 }
 
 export const EditableTable: React.FC<EditableTableProps> = ({
   data,
   setData,
   fullscreen,
+  handleReset,
 }) => {
   const [error, setError] = useState(false);
   let sum = 0;
@@ -43,18 +46,18 @@ export const EditableTable: React.FC<EditableTableProps> = ({
   ) => {
     let sum = 0;
     data.filter((row) => id !== row.id).map((row) => (sum += row.percentage));
-    console.log(sum + value);
 
     if (sum + value <= 100) {
       setError(false);
-      const newData = data.map((row) =>
-        row.id === id ? { ...row, [field]: value } : row
-      );
-      reorderRows(newData);
-      setData(newData);
     } else {
       setError(true);
     }
+
+    const newData = data.map((row) =>
+      row.id === id ? { ...row, [field]: value } : row
+    );
+    reorderRows(newData);
+    setData(newData);
   };
 
   const reorderRows = (newData: PartyData[]) => {
@@ -65,9 +68,25 @@ export const EditableTable: React.FC<EditableTableProps> = ({
     <Box
       sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}
     >
-      <Typography variant="h6" sx={{ marginBottom: "16px" }}>
-        Fennmaradó: {100 - sum}%
-      </Typography>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          width: "100%",
+        }}
+      >
+        <Button
+          variant="contained"
+          color="error"
+          sx={{ marginBottom: "16px" }}
+          onClick={handleReset}
+        >
+          Nullázás
+        </Button>
+        <Typography variant="h6" sx={{ marginBottom: "16px" }}>
+          Fennmaradó: {100 - sum}%
+        </Typography>
+      </Box>
       <TableContainer
         component={Paper}
         sx={{ maxWidth: fullscreen ? "100%" : "430px", width: "100%" }}
@@ -91,8 +110,22 @@ export const EditableTable: React.FC<EditableTableProps> = ({
                 </TableCell>
                 <TableCell>
                   <OutlinedInput
+                    sx={{
+                      "& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button":
+                        {
+                          display: "none",
+                        },
+                      "& input[type=number]": {
+                        MozAppearance: "textfield",
+                      },
+                    }}
                     type="number"
-                    placeholder={row.percentage.toString()}
+                    onKeyDown={(e) => {
+                      if (e.key === "." || e.key === ",") {
+                        e.preventDefault();
+                      }
+                    }}
+                    value={row.percentage}
                     endAdornment={
                       <InputAdornment position="end">%</InputAdornment>
                     }
@@ -101,7 +134,7 @@ export const EditableTable: React.FC<EditableTableProps> = ({
                       handleInputChange(
                         row.id,
                         "percentage",
-                        Number(e.target.value)
+                        parseInt(e.target.value)
                       )
                     }
                   />

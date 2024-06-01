@@ -10,10 +10,11 @@ import {
 } from "@mui/material";
 import React from "react";
 
-interface GuessData {
+export interface GuessData {
   name: string;
   percentage: number;
   color?: string;
+  mandates: number;
 }
 
 export interface Guess {
@@ -22,9 +23,10 @@ export interface Guess {
 }
 export interface GuessesProps {
   guesses: Guess[];
+  getPoints: (guess: Guess) => number | undefined;
 }
 
-export const Guesses: React.FC<GuessesProps> = ({ guesses }) => {
+export const Guesses: React.FC<GuessesProps> = ({ guesses, getPoints }) => {
   const sortedGuesses = guesses.map((guess) => ({
     ...guess,
     data: guess.data.sort((a, b) => a.name.localeCompare(b.name)),
@@ -40,6 +42,7 @@ export const Guesses: React.FC<GuessesProps> = ({ guesses }) => {
                 {row.name}
               </TableCell>
             ))}
+            <TableCell align="center">Pontszám</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -53,6 +56,9 @@ export const Guesses: React.FC<GuessesProps> = ({ guesses }) => {
                   <Typography>{cell.percentage}</Typography>
                 </TableCell>
               ))}
+              <TableCell align="center">
+                <Typography>{getPoints(row)}</Typography>
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>

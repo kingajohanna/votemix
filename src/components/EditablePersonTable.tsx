@@ -1,5 +1,6 @@
 import {
   Box,
+  Button,
   InputAdornment,
   OutlinedInput,
   Paper,
@@ -24,11 +25,13 @@ export interface PersonData {
 interface EditableTableProps {
   data: PersonData[];
   setData: Function;
+  handleReset: () => void;
 }
 
 export const EditablePersonTable: React.FC<EditableTableProps> = ({
   data,
   setData,
+  handleReset,
 }) => {
   const [error, setError] = useState(false);
 
@@ -45,14 +48,15 @@ export const EditablePersonTable: React.FC<EditableTableProps> = ({
 
     if (sum + value <= 100) {
       setError(false);
-      const newData = data.map((row) =>
-        row.id === id ? { ...row, [field]: value } : row
-      );
-      reorderRows(newData);
-      setData(newData);
     } else {
       setError(true);
     }
+
+    const newData = data.map((row) =>
+      row.id === id ? { ...row, [field]: value } : row
+    );
+    reorderRows(newData);
+    setData(newData);
   };
 
   const reorderRows = (newData: PersonData[]) => {
@@ -63,9 +67,25 @@ export const EditablePersonTable: React.FC<EditableTableProps> = ({
     <Box
       sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}
     >
-      <Typography variant="h6" sx={{ marginBottom: "16px" }}>
-        Fennmaradó: {100 - sum}%
-      </Typography>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          width: "100%",
+        }}
+      >
+        <Button
+          variant="contained"
+          color="error"
+          sx={{ marginBottom: "16px" }}
+          onClick={handleReset}
+        >
+          Nullázás
+        </Button>
+        <Typography variant="h6" sx={{ marginBottom: "16px" }}>
+          Fennmaradó: {100 - sum}%
+        </Typography>
+      </Box>
       <TableContainer
         component={Paper}
         sx={{ maxWidth: "430px", width: "100%" }}
@@ -90,18 +110,32 @@ export const EditablePersonTable: React.FC<EditableTableProps> = ({
                 <TableCell>
                   <OutlinedInput
                     type="number"
-                    placeholder={row.percentage.toString()}
+                    sx={{
+                      "& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button":
+                        {
+                          display: "none",
+                        },
+                      "& input[type=number]": {
+                        MozAppearance: "textfield",
+                      },
+                    }}
+                    value={row.percentage}
                     endAdornment={
                       <InputAdornment position="end">%</InputAdornment>
                     }
+                    onKeyDown={(e) => {
+                      if (e.key === "." || e.key === ",") {
+                        e.preventDefault();
+                      }
+                    }}
                     error={error}
-                    onChange={(e) =>
+                    onChange={(e) => {
                       handleInputChange(
                         row.id,
                         "percentage",
-                        Number(e.target.value)
-                      )
-                    }
+                        parseInt(e.target.value)
+                      );
+                    }}
                   />
                 </TableCell>
               </TableRow>

@@ -4,15 +4,20 @@ import Highcharts from "highcharts";
 import { useEffect, useState } from "react";
 import { Box } from "@mui/material";
 import { EditableTable, PartyData } from "../components/EditableTable";
-import { calculateMandates } from "../utils/ep";
-import { doc, getDoc, setDoc } from "firebase/firestore";
+import { calculateMandates } from "../utils/calculateMandates";
+import { collection, doc, getDoc, getDocs, setDoc } from "firebase/firestore";
 import { db } from "../App";
 import { useLocalStorage } from "../hooks/useLocalStorage";
 import { initialBpList } from "../utils/data";
+import { mandatesCalculatePoints } from "../utils/calculatePoints";
+import { Guess, Guesses } from "../components/OtherGuess";
+import { isVoteDisabled } from "../utils/disable";
 
 export const BudapestList = () => {
   const [username, _] = useLocalStorage("username");
   const [data, setData] = useState(initialBpList);
+  const [guesses, setGuesses] = useState<Guess[]>([]);
+  const [final, setFinal] = useState<Guess>();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -25,6 +30,33 @@ export const BudapestList = () => {
           setData(initialBpList);
         }
       }
+
+      const querySnapshot = await getDocs(collection(db, "votemix"));
+
+      let guesses: Guess[] = [];
+
+      querySnapshot.forEach((doc) => {
+        if (doc.id !== "admin" && doc.data().budapestlist?.length > 0)
+          guesses.push({
+            username: doc.id,
+            data: doc.data().budapestlist.map((row: PartyData) => ({
+              name: row.name,
+              percentage: row.percentage,
+              mandates: row.mandates,
+            })),
+          });
+        else if (doc.id === "admin" && doc.data().budapestlist?.length > 0)
+          setFinal({
+            username: doc.id,
+            data: doc.data().budapestlist.map((row: PartyData) => ({
+              name: row.name,
+              color: row.color,
+              percentage: row.percentage,
+              mandates: row.mandates,
+            })),
+          });
+      });
+      setGuesses(guesses);
     };
 
     fetchData();
@@ -34,7 +66,7 @@ export const BudapestList = () => {
     let sum = 0;
     data.map((row) => (sum += row.mandates));
 
-    if (21 - sum > 0) {
+    if (32 - sum > 0) {
       return [
         ...data.map((row) => [row.name, row.mandates, row.color, row.name]),
         ["no party", 32 - sum, "#a6a4a4", "no party"],
@@ -75,16 +107,55 @@ export const BudapestList = () => {
   });
 
   useEffect(() => {
-    setOptions({
-      ...options,
-      series: [
-        {
-          ...options.series[0],
-          data: getData(),
-        },
-      ],
-    });
-  }, [data]);
+    if (isVoteDisabled() && final?.data && final.data.length > 0) {
+      console.log(
+        final.data.map((row) => [
+          row.name,
+          row.percentage,
+          row.color || "#a6a4a4",
+          row.name,
+        ])
+      );
+      console.log(getData());
+
+      setOptions({
+        ...options,
+        series: [
+          {
+            ...options.series[0],
+            size: "100%",
+            data: final.data.map((row) => [
+              row.name,
+              row.mandates,
+              row.color || "#a6a4a4",
+              row.name,
+            ]),
+          },
+        ],
+      });
+    } else if (isVoteDisabled()) {
+      setOptions({
+        ...options,
+        series: [
+          {
+            ...options.series[0],
+            size: "100%",
+            data: [["no party", 32, "#a6a4a4", "no party"]],
+          },
+        ],
+      });
+    } else
+      setOptions({
+        ...options,
+        series: [
+          {
+            ...options.series[0],
+            size: "170%",
+            data: getData(),
+          },
+        ],
+      });
+  }, [data, final]);
 
   return (
     <Menu title="Fővárosi közgyűlési lista">
@@ -97,7 +168,7 @@ export const BudapestList = () => {
           containerProps={{ style: { width: "100%" } }}
           updateArgs={[true, true, true]}
         />
-        {data && (
+        {!isVoteDisabled() && data && (
           <EditableTable
             data={data}
             setData={(value: PartyData[]) => {
@@ -105,6 +176,23 @@ export const BudapestList = () => {
               setData(newValue);
               const userRef = doc(db, "votemix", username);
               setDoc(userRef, { budapestlist: newValue }, { merge: true });
+            }}
+            handleReset={() => {
+              setData(initialBpList);
+              const userRef = doc(db, "votemix", username);
+              setDoc(userRef, { budapestlist: [] }, { merge: true });
+            }}
+          />
+        )}
+        {isVoteDisabled() && guesses.length > 0 && (
+          <Guesses
+            guesses={guesses}
+            getPoints={(guess) => {
+              if (final?.data && final.data.length > 0)
+                return mandatesCalculatePoints(
+                  guess.data.slice(),
+                  final.data.slice()
+                );
             }}
           />
         )}

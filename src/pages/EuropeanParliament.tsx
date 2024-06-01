@@ -8,10 +8,11 @@ import { Box } from "@mui/material";
 import { db } from "../App";
 import { collection, doc, getDoc, getDocs, setDoc } from "firebase/firestore";
 import { useLocalStorage } from "../hooks/useLocalStorage";
-import { calculateMandates } from "../utils/ep";
+import { calculateMandates } from "../utils/calculateMandates";
 import { initialEP } from "../utils/data";
 import { Guess, Guesses } from "../components/OtherGuess";
 import { isVoteDisabled } from "../utils/disable";
+import { mandatesCalculatePoints } from "../utils/calculatePoints";
 
 itemSeries(Highcharts);
 
@@ -38,21 +39,23 @@ export const EuropeanParliament = () => {
       let guesses: Guess[] = [];
 
       querySnapshot.forEach((doc) => {
-        if (doc.id !== "admin")
+        if (doc.id !== "admin" && doc.data().ep?.length > 0)
           guesses.push({
             username: doc.id,
             data: doc.data().ep.map((row: PartyData) => ({
               name: row.name,
               percentage: row.percentage,
+              mandates: row.mandates,
             })),
           });
-        else
+        else if (doc.id === "admin" && doc.data().ep?.length > 0)
           setFinal({
             username: doc.id,
             data: doc.data().ep.map((row: PartyData) => ({
               name: row.name,
               color: row.color,
-              percentage: row.mandates,
+              percentage: row.percentage,
+              mandates: row.mandates,
             })),
           });
       });
@@ -107,7 +110,7 @@ export const EuropeanParliament = () => {
   });
 
   useEffect(() => {
-    if (isVoteDisabled() && final) {
+    if (isVoteDisabled() && final?.data && final.data.length > 0) {
       setOptions({
         ...options,
         series: [
@@ -116,7 +119,7 @@ export const EuropeanParliament = () => {
             size: "100%",
             data: final.data.map((row) => [
               row.name,
-              row.percentage,
+              row.mandates,
               row.color || "#a6a4a4",
               row.name,
             ]),
@@ -167,11 +170,25 @@ export const EuropeanParliament = () => {
               const userRef = doc(db, "votemix", username);
               setDoc(userRef, { ep: newValue }, { merge: true });
             }}
+            handleReset={() => {
+              setData(initialEP);
+              const userRef = doc(db, "votemix", username);
+              setDoc(userRef, { ep: [] }, { merge: true });
+            }}
           />
         )}
 
         {isVoteDisabled() && guesses.length > 0 && (
-          <Guesses guesses={guesses} />
+          <Guesses
+            guesses={guesses}
+            getPoints={(guess) => {
+              if (final?.data && final.data.length > 0)
+                return mandatesCalculatePoints(
+                  guess.data.slice(),
+                  final.data.slice()
+                );
+            }}
+          />
         )}
       </Box>
     </Menu>

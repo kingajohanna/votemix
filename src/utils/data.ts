@@ -17,6 +17,7 @@ export const initialEP: PartyData[] = [
     mandates: 0,
     color: "#1063a9",
   },
+  { id: 6, name: "MKKP", percentage: 0, mandates: 0, color: "#da0000" },
   {
     id: 4,
     name: "Mi Hazánk",
@@ -25,7 +26,6 @@ export const initialEP: PartyData[] = [
     color: "#6a8c1c",
   },
   { id: 5, name: "Momentum", percentage: 0, mandates: 0, color: "#9069d4" },
-  { id: 6, name: "MKKP", percentage: 0, mandates: 0, color: "#da0000" },
   {
     id: 9,
     name: "Mindenki Magyarországa Néppárt",
@@ -49,20 +49,22 @@ export const initialEP: PartyData[] = [
 export const initialBpList: PartyData[] = [
   { id: 1, name: "Fidesz-KDNP", percentage: 0, mandates: 0, color: "#F58D42" },
   {
-    id: 2,
-    name: "Tisza Párt",
-    percentage: 0,
-    mandates: 0,
-    color: "#E56750",
-  },
-  {
     id: 3,
     name: "DK–MSZP–Párbeszéd",
     percentage: 0,
     mandates: 0,
     color: "#1063a9",
   },
+  {
+    id: 2,
+    name: "Tisza Párt",
+    percentage: 0,
+    mandates: 0,
+    color: "#E56750",
+  },
+  { id: 7, name: "MKKP", percentage: 0, mandates: 0, color: "#da0000" },
   { id: 4, name: "VDBP-LMP", percentage: 0, mandates: 0, color: "#7dc340" },
+  { id: 6, name: "Momentum", percentage: 0, mandates: 0, color: "#9069d4" },
   {
     id: 5,
     name: "Mi Hazánk",
@@ -70,8 +72,6 @@ export const initialBpList: PartyData[] = [
     mandates: 0,
     color: "#6a8c1c",
   },
-  { id: 6, name: "Momentum", percentage: 0, mandates: 0, color: "#9069d4" },
-  { id: 7, name: "MKKP", percentage: 0, mandates: 0, color: "#da0000" },
   {
     id: 8,
     name: "Nép Pártján",
@@ -97,18 +97,18 @@ export const initialBpList: PartyData[] = [
 
 export const initialMayor: PersonData[] = [
   {
-    id: 1,
-    name: "Szentkirályi Alexandra",
-    percentage: 0,
-    color: "#F58D42",
-    party: "Fidesz-KDNP",
-  },
-  {
     id: 2,
     name: "Karácsony Gergely",
     percentage: 0,
     party: "DK–MSZP–Párbeszéd",
     color: "#1063a9",
+  },
+  {
+    id: 1,
+    name: "Szentkirályi Alexandra",
+    percentage: 0,
+    color: "#F58D42",
+    party: "Fidesz-KDNP",
   },
   {
     id: 3,
@@ -166,19 +166,20 @@ export const initialNine: PersonData[] = [
 
 export const initialTwelve: PersonData[] = [
   {
-    id: 1,
-    name: "Fonti Krisztina",
-    percentage: 0,
-    party: "Fidesz-KDNP",
-    color: "#F58D42",
-  },
-  {
     id: 2,
     name: "Kovács Gergely",
     percentage: 0,
     party: "MKKP",
     color: "#da0000",
   },
+  {
+    id: 1,
+    name: "Fonti Krisztina",
+    percentage: 0,
+    party: "Fidesz-KDNP",
+    color: "#F58D42",
+  },
+
   {
     id: 3,
     name: "Binder Csaba",

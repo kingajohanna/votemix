@@ -21,10 +21,9 @@ import {
   initialBpList,
   initialEP,
   initialMayor,
-  initialNine,
   initialTwelve,
 } from "../utils/data";
-import { calculateMandates } from "../utils/ep";
+import { calculateMandates } from "../utils/calculateMandates";
 import {
   EditablePersonTable,
   PersonData,
@@ -45,7 +44,7 @@ export const Admin = () => {
   const [ep, setEp] = useState(initialEP);
   const [mayor, setMayor] = useState(initialMayor);
   const [twelve, setTwelve] = useState(initialTwelve);
-  const [nine, setNine] = useState(initialNine);
+  // const [nine, setNine] = useState(initialNine);
   const [bpList, setBpList] = useState(initialBpList);
   const [participation, setParticipation] = useState(0);
 
@@ -72,7 +71,7 @@ export const Admin = () => {
       if (docSnap.data().budapestlist?.length > 0)
         setBpList(docSnap.data().budapestlist);
       if (docSnap.data().mayor?.length > 0) setMayor(docSnap.data().mayor);
-      if (docSnap.data().nine?.length > 0) setNine(docSnap.data().nine);
+      // if (docSnap.data().nine?.length > 0) setNine(docSnap.data().nine);
       if (docSnap.data().twelve?.length > 0) setTwelve(docSnap.data().twelve);
       if (docSnap.data().participation?.length > 0)
         setParticipation(docSnap.data().participation);
@@ -178,10 +177,15 @@ export const Admin = () => {
           <EditableTable
             data={ep}
             setData={(value: PartyData[]) => {
-              const newValue = calculateMandates(value, 32);
+              const newValue = calculateMandates(value, 21);
               setEp(newValue);
               const userRef = doc(db, "votemix", "admin");
               setDoc(userRef, { ep: newValue }, { merge: true });
+            }}
+            handleReset={() => {
+              setEp(initialEP);
+              const userRef = doc(db, "votemix", "admin");
+              setDoc(userRef, { ep: [] }, { merge: true });
             }}
           />
         </Box>
@@ -201,6 +205,11 @@ export const Admin = () => {
               setBpList(newValue);
               const userRef = doc(db, "votemix", "admin");
               setDoc(userRef, { budapestlist: newValue }, { merge: true });
+            }}
+            handleReset={() => {
+              setBpList(initialBpList);
+              const userRef = doc(db, "votemix", "admin");
+              setDoc(userRef, { budapestlist: [] }, { merge: true });
             }}
           />
         </Box>
@@ -228,6 +237,11 @@ export const Admin = () => {
               const userRef = doc(db, "votemix", "admin");
               setDoc(userRef, { mayor: value }, { merge: true });
             }}
+            handleReset={() => {
+              setMayor(initialMayor);
+              const userRef = doc(db, "votemix", "admin");
+              setDoc(userRef, { mayor: [] }, { merge: true });
+            }}
           />
         </Box>
 
@@ -242,10 +256,15 @@ export const Admin = () => {
               const userRef = doc(db, "votemix", "admin");
               setDoc(userRef, { twelve: value }, { merge: true });
             }}
+            handleReset={() => {
+              setTwelve(initialTwelve);
+              const userRef = doc(db, "votemix", "admin");
+              setDoc(userRef, { twelve: [] }, { merge: true });
+            }}
           />
         </Box>
 
-        <Box>
+        {/*<Box>
           <Typography
             variant="h4"
             align="center"
@@ -261,8 +280,9 @@ export const Admin = () => {
               const userRef = doc(db, "votemix", "admin");
               setDoc(userRef, { nine: value }, { merge: true });
             }}
+            handleReset={() => setNine(initialNine)}
           />
-        </Box>
+          </Box>*/}
       </Box>
     </Box>
   );

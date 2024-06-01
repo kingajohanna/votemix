@@ -125,6 +125,7 @@ export const Nine = () => {
             const userRef = doc(db, "votemix", username);
             setDoc(userRef, { nine: value }, { merge: true });
           }}
+          handleReset={() => setData(initialNine)}
         />
       </Box>
     </Menu>

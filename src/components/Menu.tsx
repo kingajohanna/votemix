@@ -12,11 +12,7 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import Drawer from "@mui/material/Drawer";
-import {
-  PiNumberNineBold,
-  PiNumberOneBold,
-  PiNumberTwoBold,
-} from "react-icons/pi";
+import { PiNumberOneBold, PiNumberTwoBold } from "react-icons/pi";
 import { IoIosPerson } from "react-icons/io";
 import { GiEuropeanFlag } from "react-icons/gi";
 import { HiHome } from "react-icons/hi";
@@ -29,12 +25,13 @@ const tabs = [
     path: "/european-parliament",
     icon: <GiEuropeanFlag />,
   },
-  { label: "Főpolgármester választás", path: "/mayor", icon: <IoIosPerson /> },
   {
     label: "Fővárosi közgyűlési lista",
     path: "/budapest-list",
     icon: <IoIosPerson />,
   },
+  { label: "Főpolgármester választás", path: "/mayor", icon: <IoIosPerson /> },
+
   {
     label: "12. kerület",
     path: "/12-district",
@@ -44,7 +41,7 @@ const tabs = [
       </>
     ),
   },
-  { label: "9. kerület", path: "/9-district", icon: <PiNumberNineBold /> },
+  //{ label: "9. kerület", path: "/9-district", icon: <PiNumberNineBold /> },
 ];
 
 export const Menu = ({ children, title }: any) => {
