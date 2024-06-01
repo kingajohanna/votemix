@@ -105,7 +105,7 @@ export const Admin = () => {
         <Table style={{ tableLayout: "fixed" }} aria-label="simple table">
           <TableHead>
             <TableRow>
-              <TableCell>Username</TableCell>
+              <TableCell>Név</TableCell>
               <TableCell align="center">EP</TableCell>
               <TableCell align="center">Budapest List</TableCell>
               <TableCell align="center">Mayor</TableCell>
