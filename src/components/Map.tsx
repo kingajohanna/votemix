@@ -34,7 +34,7 @@ export const Map: React.FC<MapProps> = ({ percentage }) => {
         <Box sx={{ height: "33%", backgroundColor: "#1d9918" }} />
       </Box>
       <img
-        src="../../public/hunmap.png"
+        src="/hunmap.png"
         alt="map"
         style={{
           overflow: "hidden",
