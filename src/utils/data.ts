@@ -59,7 +59,7 @@ export const initialEP: PartyData[] = [
   },
   {
     id: 9,
-    name: "Mindenki Magyarországa Néppárt",
+    name: "MMN",
     percentage: 0,
     mandates: 0,
     color: "#011166",

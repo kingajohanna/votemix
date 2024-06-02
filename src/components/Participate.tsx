@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { db } from "../App";
 import { useLocalStorage } from "../hooks/useLocalStorage";
 import { Map } from "./Map";
+import { isVoteDisabled } from "../utils/disable";
 
 export const Participate = () => {
   const [username, _] = useLocalStorage("username");
@@ -12,6 +13,15 @@ export const Participate = () => {
 
   useEffect(() => {
     const fetchData = async () => {
+      if (isVoteDisabled()) {
+        const docRef = doc(db, "votemix", "admin");
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+          if (docSnap.data().participation) {
+            setValue(docSnap.data().participation);
+          }
+        }
+      }
       const docRef = doc(db, "votemix", username);
       const docSnap = await getDoc(docRef);
       if (docSnap.exists()) {
@@ -34,9 +44,29 @@ export const Participate = () => {
       <Map percentage={value} />
       <OutlinedInput
         type="number"
-        placeholder={value.toString()}
+        sx={{
+          "& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button":
+            {
+              display: "none",
+            },
+          "& input[type=number]": {
+            MozAppearance: "textfield",
+          },
+        }}
+        disabled={isVoteDisabled()}
+        value={value}
         endAdornment={<InputAdornment position="end">%</InputAdornment>}
         error={error}
+        onKeyDown={(e) => {
+          if (
+            !/^[0-9]+$/.test(e.key) &&
+            e.key !== "Backspace" &&
+            e.key !== "ArrowLeft" &&
+            e.key !== "ArrowRight"
+          ) {
+            e.preventDefault();
+          }
+        }}
         onChange={(e) => {
           const value = parseFloat(e.target.value);
           if (value < 0 || value > 100) setError(true);

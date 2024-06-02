@@ -131,6 +131,7 @@ export const EditablePersonTable: React.FC<EditableTableProps> = ({
                   <OutlinedInput
                     type="number"
                     sx={{
+                      paddingRight: "4px",
                       "& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button":
                         {
                           display: "none",
@@ -139,7 +140,7 @@ export const EditablePersonTable: React.FC<EditableTableProps> = ({
                         MozAppearance: "textfield",
                       },
                     }}
-                    value={row.percentage}
+                    placeholder={row.percentage.toString()}
                     endAdornment={
                       <InputAdornment position="end">%</InputAdornment>
                     }

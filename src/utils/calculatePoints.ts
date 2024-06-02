@@ -21,9 +21,9 @@ export const mandatesCalculatePoints = (
   let mandatesPoint = 0;
   for (let i = 0; i < result.length; i++) {
     if (result[i].mandates === guess[i].mandates) {
-      mandatesPoint += guess[i].mandates * 3;
-    } else if (result[i].mandates > guess[i].mandates) {
       mandatesPoint += guess[i].mandates * 2;
+    } else if (result[i].mandates > guess[i].mandates) {
+      mandatesPoint += guess[i].mandates;
     } else {
       mandatesPoint += result[i].mandates!;
     }

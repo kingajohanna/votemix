@@ -43,6 +43,7 @@ interface User {
   twelve: boolean;
   nine: boolean;
   budapestList: boolean;
+  participation: boolean;
 }
 
 interface Points {
@@ -112,6 +113,7 @@ export const Admin = () => {
           twelve: doc.data().twelve?.length > 0,
           nine: doc.data().nine?.length > 0,
           budapestList: doc.data().budapestlist?.length > 0,
+          participation: !!doc.data().participation,
         });
     });
     return users;
@@ -208,16 +210,14 @@ export const Admin = () => {
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
+        padding: "8px",
       }}
     >
       <Typography variant="h4" align="center" gutterBottom>
         Játékosok
       </Typography>
       <TableContainer component={Paper}>
-        <Table
-          style={{ tableLayout: "fixed", maxWidth: "100%" }}
-          aria-label="simple table"
-        >
+        <Table aria-label="simple table">
           <TableHead>
             <TableRow>
               <TableCell>Felhasználónév</TableCell>
@@ -245,6 +245,9 @@ export const Admin = () => {
                 <TableCell align="center">{user.mayor ? "x" : ""}</TableCell>
                 <TableCell align="center">{user.twelve ? "x" : ""}</TableCell>
                 <TableCell align="center">{user.nine ? "x" : ""}</TableCell>
+                <TableCell align="center">
+                  {user.participation ? "x" : ""}
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
@@ -261,13 +264,7 @@ export const Admin = () => {
       </Typography>
 
       <TableContainer component={Paper}>
-        <Table
-          sx={{
-            tableLayout: "fixed",
-            maxWidth: "100%",
-          }}
-          aria-label="simple table"
-        >
+        <Table aria-label="simple table">
           <TableHead>
             <TableRow>
               <TableCell>Felhasználónév</TableCell>
@@ -355,7 +352,7 @@ export const Admin = () => {
           marginTop: "16px",
         }}
       >
-        <Box sx={{ marginTop: "16px", marginRight: "16px" }}>
+        <Box sx={{ marginTop: "16px", marginRight: { sm: "16px", xs: 0 } }}>
           <Typography variant="h4" align="center" gutterBottom>
             EP eredmények
           </Typography>
@@ -411,8 +408,8 @@ export const Admin = () => {
           marginTop: "16px",
         }}
       >
-        <Box sx={{ marginTop: "16px", marginRight: "16px" }}>
-          <Typography variant="h4" align="center" gutterBottom>
+        <Box sx={{ marginTop: "16px", marginRight: { sm: "16px", xs: 0 } }}>
+          <Typography variant="h4" align="center" sx={{ height: "84px" }}>
             Főpolgármester választás
           </Typography>
           <EditablePersonTable
@@ -430,8 +427,8 @@ export const Admin = () => {
           />
         </Box>
 
-        <Box sx={{ marginTop: "16px", marginRight: "16px" }}>
-          <Typography variant="h4" align="center" gutterBottom>
+        <Box sx={{ marginTop: "16px", marginRight: { sm: "16px", xs: 0 } }}>
+          <Typography variant="h4" align="center" sx={{ height: "84px" }}>
             12. kerület
           </Typography>
           <EditablePersonTable
@@ -449,13 +446,8 @@ export const Admin = () => {
           />
         </Box>
 
-        <Box>
-          <Typography
-            variant="h4"
-            align="center"
-            gutterBottom
-            sx={{ marginTop: "16px" }}
-          >
+        <Box sx={{ marginTop: "16px" }}>
+          <Typography variant="h4" align="center" sx={{ height: "84px" }}>
             9. kerület
           </Typography>
           <EditablePersonTable

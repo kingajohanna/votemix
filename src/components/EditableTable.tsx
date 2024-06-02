@@ -125,12 +125,13 @@ export const EditableTable: React.FC<EditableTableProps> = ({
                 <TableCell>
                   <Typography>{row.name}</Typography>
                 </TableCell>
-                <TableCell>
+                <TableCell align="center">
                   <Typography>{row.mandates}</Typography>
                 </TableCell>
                 <TableCell>
                   <OutlinedInput
                     sx={{
+                      paddingRight: "4px",
                       "& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button":
                         {
                           display: "none",
@@ -150,7 +151,7 @@ export const EditableTable: React.FC<EditableTableProps> = ({
                         e.preventDefault();
                       }
                     }}
-                    value={row.percentage}
+                    placeholder={row.percentage.toString()}
                     endAdornment={
                       <InputAdornment position="end">%</InputAdornment>
                     }
