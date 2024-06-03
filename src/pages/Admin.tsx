@@ -139,7 +139,7 @@ export const Admin = () => {
           twelve: doc.data().points.twelve,
           nine: doc.data().points.nine,
           budapestList: doc.data().points.budapestList,
-          participation: doc.data().participation,
+          participation: doc.data().points.participation,
         });
     });
     return points;
@@ -169,23 +169,23 @@ export const Admin = () => {
         };
         const userGuesses = await getUserGuesses(user.username);
         userPoints.ep = calculatePercentagePoints(
-          userGuesses.ep.slice(),
+          userGuesses.ep?.slice(),
           ep.slice()
         );
         userPoints.mayor = calculatePercentagePoints(
-          userGuesses.mayor,
+          userGuesses.mayor?.slice(),
           personToGuessData(mayor.slice())
         );
         userPoints.twelve = calculatePercentagePoints(
-          userGuesses.twelve,
+          userGuesses.twelve?.slice(),
           personToGuessData(twelve.slice())
         );
         userPoints.nine = calculatePercentagePoints(
-          userGuesses.nine,
+          userGuesses.nine?.slice(),
           personToGuessData(nine.slice())
         );
         userPoints.budapestList = calculatePercentagePoints(
-          userGuesses.budapestlist,
+          userGuesses.budapestlist?.slice(),
           bpList.slice()
         );
 
@@ -292,12 +292,14 @@ export const Admin = () => {
                 <TableCell align="center">{user.nine}</TableCell>
                 <TableCell align="center">{user.participation}</TableCell>
                 <TableCell align="center">
-                  {user.ep +
+                  {(
+                    user.ep +
                     user.budapestList +
                     user.mayor +
                     user.twelve +
                     user.nine +
-                    user.participation}
+                    user.participation
+                  ).toFixed(1)}
                 </TableCell>
               </TableRow>
             ))}
@@ -356,7 +358,6 @@ export const Admin = () => {
             EP eredmények
           </Typography>
           <EditableTable
-            nonRestricted
             data={ep}
             setData={(value: PartyData[]) => {
               const newValue = calculateMandates(value, 21);
@@ -381,7 +382,6 @@ export const Admin = () => {
             Fővárosi lista eredmények
           </Typography>
           <EditableTable
-            nonRestricted
             data={bpList}
             setData={(value: PartyData[]) => {
               const newValue = calculateMandates(value, 32);
@@ -414,7 +414,6 @@ export const Admin = () => {
             Főpolgármester választás
           </Typography>
           <EditablePersonTable
-            nonRestricted
             data={mayor}
             setData={(value: PersonData[]) => {
               setMayor(value);
@@ -434,7 +433,6 @@ export const Admin = () => {
             12. kerület
           </Typography>
           <EditablePersonTable
-            nonRestricted
             data={twelve}
             setData={(value: PersonData[]) => {
               setTwelve(value);
@@ -454,7 +452,6 @@ export const Admin = () => {
             9. kerület
           </Typography>
           <EditablePersonTable
-            nonRestricted
             data={nine}
             setData={(value: PersonData[]) => {
               setNine(value);

@@ -28,7 +28,6 @@ interface EditableTableProps {
   setData: Function;
   fullscreen?: boolean;
   handleReset: () => void;
-  nonRestricted?: boolean;
 }
 
 export const EditableTable: React.FC<EditableTableProps> = ({
@@ -36,7 +35,6 @@ export const EditableTable: React.FC<EditableTableProps> = ({
   setData,
   fullscreen,
   handleReset,
-  nonRestricted,
 }) => {
   const [error, setError] = useState(false);
   let sum = 0;
@@ -45,22 +43,26 @@ export const EditableTable: React.FC<EditableTableProps> = ({
   const handleInputChange = (
     id: number,
     field: keyof PartyData,
-    value: number
+    value: string
   ) => {
-    let sum = 0;
-    data.filter((row) => id !== row.id).map((row) => (sum += row.percentage));
+    const regex = /^\d*\.?\d{0,1}$/;
+    if (regex.test(value)) {
+      let valueF = parseFloat(value);
+      let sum = 0;
+      data.filter((row) => id !== row.id).map((row) => (sum += row.percentage));
 
-    if (sum + value <= 100) {
-      setError(false);
-    } else {
-      setError(true);
+      if (sum + valueF <= 100) {
+        setError(false);
+      } else {
+        setError(true);
+      }
+
+      const newData = data.map((row) =>
+        row.id === id ? { ...row, [field]: valueF } : row
+      );
+      reorderRows(newData);
+      setData(newData);
     }
-
-    const newData = data.map((row) =>
-      row.id === id ? { ...row, [field]: value } : row
-    );
-    reorderRows(newData);
-    setData(newData);
   };
 
   const reorderRows = (newData: PartyData[]) => {
@@ -75,19 +77,15 @@ export const EditableTable: React.FC<EditableTableProps> = ({
         sx={{
           display: "flex",
           justifyContent: "space-between",
-          width: "100%",
+          width: "95%",
+          marginBottom: "16px",
         }}
       >
-        <Button
-          variant="contained"
-          color="error"
-          sx={{ marginBottom: "16px" }}
-          onClick={handleReset}
-        >
+        <Button variant="contained" color="error" sx={{}} onClick={handleReset}>
           Nullázás
         </Button>
-        <Typography variant="h6" sx={{ marginBottom: "16px" }}>
-          Fennmaradó: {100 - sum}%
+        <Typography variant="h6">
+          Fennmaradó: {(100.0 - sum).toFixed(1)}%
         </Typography>
       </Box>
       <TableContainer
@@ -100,7 +98,7 @@ export const EditableTable: React.FC<EditableTableProps> = ({
               <TableCell></TableCell>
               <TableCell>Pártnév</TableCell>
               <TableCell>Mandátum</TableCell>
-              <TableCell>Százalék</TableCell>
+              <TableCell width={"20%"}>Százalék</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -145,8 +143,7 @@ export const EditableTable: React.FC<EditableTableProps> = ({
                     type="number"
                     onKeyDown={(e) => {
                       if (
-                        !nonRestricted &&
-                        !/^[0-9]+$/.test(e.key) &&
+                        !/^[0-9\.,]+$/.test(e.key) &&
                         e.key !== "Backspace" &&
                         e.key !== "ArrowLeft" &&
                         e.key !== "ArrowRight"
@@ -159,12 +156,15 @@ export const EditableTable: React.FC<EditableTableProps> = ({
                       <InputAdornment position="end">%</InputAdornment>
                     }
                     error={error}
-                    onChange={(e) => {
-                      handleInputChange(
-                        row.id,
-                        "percentage",
-                        parseFloat(e.target.value)
-                      );
+                    onChange={(e) =>
+                      handleInputChange(row.id, "percentage", e.target.value)
+                    }
+                    onInput={(e) => {
+                      const input = e.target as HTMLInputElement;
+                      const regex = /^\d*\.?\d{0,1}$/;
+                      if (!regex.test(input.value)) {
+                        input.value = input.value.slice(0, -1);
+                      }
                     }}
                   />
                 </TableCell>

@@ -16,6 +16,7 @@ import { isVoteDisabled } from "../utils/disable";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../App";
 import { useEffect, useState } from "react";
+import "katex/dist/katex.min.css";
 
 interface Points {
   username: string;
@@ -26,6 +27,15 @@ interface Points {
   budapestList: number;
   participation: number;
 }
+
+const games = [
+  "Részvétel",
+  "Európai Parlament",
+  "Fővárosi közgyűlési lista",
+  "Főpolgármester",
+  "12. kerület",
+  "9. kerület",
+];
 
 export const Welcome = () => {
   const [points, setPoints] = useState<Points[]>([]);
@@ -70,12 +80,88 @@ export const Welcome = () => {
     <Menu title="Kezdőlap">
       <Box
         sx={{
-          padding: "8px",
+          padding: "16px",
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
         }}
       >
+        <Typography variant="h5" align="center" gutterBottom>
+          Üdvözöllek az oldalon!
+        </Typography>
+        <Typography variant="body1" gutterBottom textAlign="justify">
+          Itt a 2024-es Európai Parlamenti és Önkormányzati választások
+          eredményeire tudsz tippelni. A tippelés lezárultát a lenti
+          visszaszámoló mutatja, eddig adhatod le tippedet a következő
+          kategóriákban:
+        </Typography>
+
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: { xs: "column", sm: "row" },
+          }}
+        >
+          {games.map((item, index) => (
+            <Box key={index} display="flex" alignItems="center" m={1}>
+              <Box
+                width={8}
+                height={8}
+                borderRadius="50%"
+                bgcolor="black"
+                mr={1}
+              />
+              {item}
+            </Box>
+          ))}
+        </Box>
+
+        <Typography variant="body1" gutterBottom>
+          A tippeket, a részvétel kivételével, amit ezen az oldalon, a hamburger
+          menüből kiválasztva lehet leadni. Minden esetben <b>százalékokat</b>{" "}
+          kell tippelni, azaz, hogy a részvételi, illetve a pártok vagy jelöltek
+          támogatottságának aránya hogyan alakul.
+        </Typography>
+        <Typography variant="body1" gutterBottom textAlign="justify">
+          <b>Pontszámítás:</b>
+        </Typography>
+        <Typography variant="body1" gutterBottom textAlign="justify">
+          a részvételt kivéve, minden alversenyben a százalékos tévedést
+          összegezzük és vonjuk le 100-ból. A részvételért csak bónusz pontokat
+          lehet kapni: egészre kerekített pontos találat +15 pont, 3% tévedés
+          +10 pont, 5% tévedés +5 pont. Így az alversenyeknek külön győztesei
+          vannak, de a végső győztes az, akinek összetettben, azaz az összes
+          alversenyben elért pontszámának össze a legmagasabb.
+        </Typography>
+        <Typography variant="body1" gutterBottom>
+          Mindez matematikailag:
+        </Typography>
+
+        <img
+          src="/calc.png"
+          alt="calc"
+          style={{
+            width: "98%",
+          }}
+        />
+
+        {/*<Box sx={{}}>
+          <InlineMath
+            math={
+              "\\forall Alverseny \\setminus \\{Részvétel\\}: Pont = 100 - |Eredmény - Tipp|"
+            }
+          />{" "}
+          <BlockMath
+            math={
+              "RészvételBónusz = \\begin{cases}15 & \\text{ha } [Eredmény] = Tipp \\\\ 10 & \\text{ha } |[Eredmény] - Tipp| \\le 3 \\\\ 5 & \\text{ha } |[Eredmény] - Tipp| \\le 5 \\\\ 0 & \\text{különben} \\end{cases}"
+            }
+          />
+          <InlineMath
+            math={
+              "ÖsszPont = RészvételBónusz + \\sum_{i \\in Alverseny \\setminus \\{Részvétel\\}}Pont_i"
+            }
+          />
+          </Box>*/}
         {!isVoteDisabled() && <Countdown />}
         <Participate />
         {isVoteDisabled() && (
