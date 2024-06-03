@@ -22,6 +22,7 @@ export const Map: React.FC<MapProps> = ({ percentage }) => {
       <Box
         sx={{
           height: `${height}px`,
+          width: "99%",
           paddingTop: `${baseHeight - height}px`,
           position: "relative",
           overflow: "hidden",

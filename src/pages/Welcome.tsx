@@ -141,15 +141,15 @@ export const Welcome = () => {
           src="/calc.png"
           alt="calc"
           style={{
-            maxWidth: "430px",
-            width: "98%",
+            maxWidth: "470px",
+            width: "100%",
           }}
         />
 
         {/*<Box sx={{}}>
           <InlineMath
             math={
-              "\\forall Alverseny \\setminus \\{Részvétel\\}: Pont = 100 - |Eredmény - Tipp|"
+              "\\forall Alverseny \\setminus \\{Részvétel\\}: Pont_i = 100 - \\sum_{j \\in Párt} |Eredmény_j - Tipp_j|"
             }
           />{" "}
           <BlockMath
