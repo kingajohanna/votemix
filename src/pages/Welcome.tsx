@@ -131,7 +131,7 @@ export const Welcome = () => {
           lehet kapni: egészre kerekített pontos találat +15 pont, 3% tévedés
           +10 pont, 5% tévedés +5 pont. Így az alversenyeknek külön győztesei
           vannak, de a végső győztes az, akinek összetettben, azaz az összes
-          alversenyben elért pontszámának össze a legmagasabb.
+          alversenyben elért pontszámának összege a legmagasabb.
         </Typography>
         <Typography variant="body1" gutterBottom>
           Mindez matematikailag:
