@@ -9,7 +9,7 @@ import { collection, doc, getDoc, getDocs, setDoc } from "firebase/firestore";
 import { db } from "../App";
 import { useLocalStorage } from "../hooks/useLocalStorage";
 import { initialBpList } from "../utils/data";
-import { mandatesCalculatePoints } from "../utils/calculatePoints";
+import { calculatePercentagePoints } from "../utils/calculatePoints";
 import { Guess, Guesses } from "../components/OtherGuess";
 import { isVoteDisabled } from "../utils/disable";
 
@@ -179,7 +179,7 @@ export const BudapestList = () => {
             guesses={guesses}
             getPoints={(guess) => {
               if (final?.data && final.data.length > 0)
-                return mandatesCalculatePoints(
+                return calculatePercentagePoints(
                   guess.data.slice(),
                   final.data.slice()
                 );

@@ -12,7 +12,7 @@ import { calculateMandates } from "../utils/calculateMandates";
 import { initialEP } from "../utils/data";
 import { Guess, Guesses } from "../components/OtherGuess";
 import { isVoteDisabled } from "../utils/disable";
-import { mandatesCalculatePoints } from "../utils/calculatePoints";
+import { calculatePercentagePoints } from "../utils/calculatePoints";
 
 itemSeries(Highcharts);
 
@@ -183,7 +183,7 @@ export const EuropeanParliament = () => {
             guesses={guesses}
             getPoints={(guess) => {
               if (final?.data && final.data.length > 0)
-                return mandatesCalculatePoints(
+                return calculatePercentagePoints(
                   guess.data.slice(),
                   final.data.slice()
                 );

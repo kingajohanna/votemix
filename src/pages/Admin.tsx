@@ -32,8 +32,7 @@ import {
 } from "../components/EditablePersonTable";
 import {
   calculateParticipationPoints,
-  mandatesCalculatePoints,
-  personalCalculatePoints,
+  calculatePercentagePoints,
 } from "../utils/calculatePoints";
 
 interface User {
@@ -169,23 +168,23 @@ export const Admin = () => {
           participation: 0,
         };
         const userGuesses = await getUserGuesses(user.username);
-        userPoints.ep = mandatesCalculatePoints(
+        userPoints.ep = calculatePercentagePoints(
           userGuesses.ep.slice(),
           ep.slice()
         );
-        userPoints.mayor = personalCalculatePoints(
+        userPoints.mayor = calculatePercentagePoints(
           userGuesses.mayor,
           personToGuessData(mayor.slice())
         );
-        userPoints.twelve = personalCalculatePoints(
+        userPoints.twelve = calculatePercentagePoints(
           userGuesses.twelve,
           personToGuessData(twelve.slice())
         );
-        userPoints.nine = personalCalculatePoints(
+        userPoints.nine = calculatePercentagePoints(
           userGuesses.nine,
           personToGuessData(nine.slice())
         );
-        userPoints.budapestList = mandatesCalculatePoints(
+        userPoints.budapestList = calculatePercentagePoints(
           userGuesses.budapestlist,
           bpList.slice()
         );

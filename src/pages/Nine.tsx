@@ -12,7 +12,7 @@ import HighchartsReact from "highcharts-react-official";
 import Highcharts from "highcharts";
 import { initialNine } from "../utils/data";
 import { Guess, Guesses } from "../components/OtherGuess";
-import { personalCalculatePoints } from "../utils/calculatePoints";
+import { calculatePercentagePoints } from "../utils/calculatePoints";
 import { isVoteDisabled } from "../utils/disable";
 
 export const Nine = () => {
@@ -195,7 +195,7 @@ export const Nine = () => {
             guesses={guesses}
             getPoints={(guess: Guess) => {
               if (final?.data && final.data.length > 0)
-                return personalCalculatePoints(
+                return calculatePercentagePoints(
                   guess.data.slice(),
                   final.data.slice()
                 );
