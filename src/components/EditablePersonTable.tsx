@@ -101,7 +101,7 @@ export const EditablePersonTable: React.FC<EditableTableProps> = ({
               <TableCell></TableCell>
               <TableCell>Jelölt</TableCell>
               <TableCell>Pártnév</TableCell>
-              <TableCell width={"20%"}>Százalék</TableCell>
+              <TableCell width={"80px"}>Százalék</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
