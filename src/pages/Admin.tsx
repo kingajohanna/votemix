@@ -131,7 +131,7 @@ export const Admin = () => {
     const querySnapshot = await getDocs(collection(db, "votemix"));
     let points: Points[] = [];
     querySnapshot.forEach((doc) => {
-      if (doc.id !== "admin")
+      if (doc.id !== "admin" && doc.data().points)
         points.push({
           username: doc.id,
           ep: doc.data().points.ep,

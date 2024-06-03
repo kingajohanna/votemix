@@ -192,6 +192,7 @@ export const Mayor = () => {
         {isVoteDisabled() && guesses.length > 0 && (
           <Guesses
             guesses={guesses}
+            final={final}
             getPoints={(guess) => {
               if (final?.data && final.data.length > 0)
                 return calculatePercentagePoints(

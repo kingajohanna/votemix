@@ -67,7 +67,7 @@ export const Menu = ({ children, title }: any) => {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static" sx={{ backgroundColor: "#6b55a1" }}>
+      <AppBar position="static">
         <Toolbar>
           <IconButton
             size="large"

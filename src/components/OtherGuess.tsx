@@ -23,14 +23,29 @@ export interface Guess {
 }
 export interface GuessesProps {
   guesses: Guess[];
+  final: Guess | undefined;
   getPoints: (guess: Guess) => number | undefined;
 }
 
-export const Guesses: React.FC<GuessesProps> = ({ guesses, getPoints }) => {
+export const Guesses: React.FC<GuessesProps> = ({
+  guesses,
+  final,
+  getPoints,
+}) => {
+  const [maxPoint, setMaxPoint] = React.useState(0);
   const sortedGuesses = guesses.map((guess) => ({
     ...guess,
     data: guess.data.sort((a, b) => a.name.localeCompare(b.name)),
   }));
+
+  const getPointsForGuess = (guess: Guess) => {
+    const points = getPoints(guess);
+    if (points !== undefined && points > maxPoint) {
+      setMaxPoint(points);
+    }
+    return points;
+  };
+
   return (
     <TableContainer component={Paper} sx={{ width: "100%" }}>
       <Table>
@@ -46,8 +61,27 @@ export const Guesses: React.FC<GuessesProps> = ({ guesses, getPoints }) => {
           </TableRow>
         </TableHead>
         <TableBody>
+          <TableRow>
+            <TableCell align="center">
+              <Typography>Eredmény</Typography>
+            </TableCell>
+            {final?.data.map((cell, index) => (
+              <TableCell align="center" key={index}>
+                <Typography>{cell.percentage}</Typography>
+              </TableCell>
+            ))}
+            <TableCell align="center">
+              <Typography></Typography>
+            </TableCell>
+          </TableRow>
           {sortedGuesses.map((row) => (
-            <TableRow key={row.username}>
+            <TableRow
+              key={row.username}
+              sx={{
+                backgroundColor:
+                  getPointsForGuess(row) === maxPoint ? "#c3b7ec" : "",
+              }}
+            >
               <TableCell align="center">
                 <Typography>{row.username}</Typography>
               </TableCell>
@@ -57,7 +91,7 @@ export const Guesses: React.FC<GuessesProps> = ({ guesses, getPoints }) => {
                 </TableCell>
               ))}
               <TableCell align="center">
-                <Typography>{getPoints(row)}</Typography>
+                <Typography>{getPointsForGuess(row)}</Typography>
               </TableCell>
             </TableRow>
           ))}
