@@ -28,6 +28,7 @@ interface EditableTableProps {
   setData: Function;
   fullscreen?: boolean;
   handleReset: () => void;
+  nonRestricted?: boolean;
 }
 
 export const EditableTable: React.FC<EditableTableProps> = ({
@@ -35,6 +36,7 @@ export const EditableTable: React.FC<EditableTableProps> = ({
   setData,
   fullscreen,
   handleReset,
+  nonRestricted,
 }) => {
   const [error, setError] = useState(false);
   let sum = 0;
@@ -143,6 +145,7 @@ export const EditableTable: React.FC<EditableTableProps> = ({
                     type="number"
                     onKeyDown={(e) => {
                       if (
+                        !nonRestricted &&
                         !/^[0-9]+$/.test(e.key) &&
                         e.key !== "Backspace" &&
                         e.key !== "ArrowLeft" &&
@@ -156,13 +159,13 @@ export const EditableTable: React.FC<EditableTableProps> = ({
                       <InputAdornment position="end">%</InputAdornment>
                     }
                     error={error}
-                    onChange={(e) =>
+                    onChange={(e) => {
                       handleInputChange(
                         row.id,
                         "percentage",
-                        parseInt(e.target.value)
-                      )
-                    }
+                        parseFloat(e.target.value)
+                      );
+                    }}
                   />
                 </TableCell>
               </TableRow>

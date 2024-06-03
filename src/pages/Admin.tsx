@@ -69,7 +69,7 @@ export const Admin = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (username !== "kingajohanna") {
+    if (username !== import.meta.env.VITE_ADMIN) {
       navigate("/welcome");
     }
     const fetchData = async () => {
@@ -356,6 +356,7 @@ export const Admin = () => {
             EP eredmények
           </Typography>
           <EditableTable
+            nonRestricted
             data={ep}
             setData={(value: PartyData[]) => {
               const newValue = calculateMandates(value, 21);
@@ -380,6 +381,7 @@ export const Admin = () => {
             Fővárosi lista eredmények
           </Typography>
           <EditableTable
+            nonRestricted
             data={bpList}
             setData={(value: PartyData[]) => {
               const newValue = calculateMandates(value, 32);
@@ -412,6 +414,7 @@ export const Admin = () => {
             Főpolgármester választás
           </Typography>
           <EditablePersonTable
+            nonRestricted
             data={mayor}
             setData={(value: PersonData[]) => {
               setMayor(value);
@@ -431,6 +434,7 @@ export const Admin = () => {
             12. kerület
           </Typography>
           <EditablePersonTable
+            nonRestricted
             data={twelve}
             setData={(value: PersonData[]) => {
               setTwelve(value);
@@ -450,6 +454,7 @@ export const Admin = () => {
             9. kerület
           </Typography>
           <EditablePersonTable
+            nonRestricted
             data={nine}
             setData={(value: PersonData[]) => {
               setNine(value);

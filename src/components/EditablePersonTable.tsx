@@ -27,12 +27,14 @@ interface EditableTableProps {
   data: PersonData[];
   setData: Function;
   handleReset: () => void;
+  nonRestricted?: boolean;
 }
 
 export const EditablePersonTable: React.FC<EditableTableProps> = ({
   data,
   setData,
   handleReset,
+  nonRestricted,
 }) => {
   const [error, setError] = useState(false);
 
@@ -146,6 +148,7 @@ export const EditablePersonTable: React.FC<EditableTableProps> = ({
                     }
                     onKeyDown={(e) => {
                       if (
+                        !nonRestricted &&
                         !/^[0-9]+$/.test(e.key) &&
                         e.key !== "Backspace" &&
                         e.key !== "ArrowLeft" &&
@@ -159,7 +162,7 @@ export const EditablePersonTable: React.FC<EditableTableProps> = ({
                       handleInputChange(
                         row.id,
                         "percentage",
-                        parseInt(e.target.value)
+                        parseFloat(e.target.value)
                       );
                     }}
                   />
