@@ -80,7 +80,10 @@ export const Welcome = () => {
     <Menu title="Kezdőlap">
       <Box
         sx={{
-          padding: "16px",
+          paddingTop: "16px",
+          paddingBottom: "16px",
+          paddingLeft: { sm: "72px", xs: "16px" },
+          paddingRight: { sm: "72px", xs: "16px" },
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
@@ -99,11 +102,12 @@ export const Welcome = () => {
         <Box
           sx={{
             display: "flex",
-            flexDirection: { xs: "column", sm: "row" },
+            flexDirection: "column",
+            marginBottom: "16px",
           }}
         >
           {games.map((item, index) => (
-            <Box key={index} display="flex" alignItems="center" m={1}>
+            <Box key={index} display="flex" alignItems="center">
               <Box
                 width={8}
                 height={8}
@@ -143,6 +147,7 @@ export const Welcome = () => {
           style={{
             maxWidth: "470px",
             width: "100%",
+            marginBottom: "16px",
           }}
         />
 
@@ -163,8 +168,12 @@ export const Welcome = () => {
             }
           />
           </Box>*/}
-        {!isVoteDisabled() && <Countdown />}
-        <Participate />
+        {!isVoteDisabled() && (
+          <>
+            <Countdown />
+            <Participate />
+          </>
+        )}
         {isVoteDisabled() && (
           <>
             <Typography
@@ -217,12 +226,14 @@ export const Welcome = () => {
                       <TableCell align="center">{user.nine}</TableCell>
                       <TableCell align="center">{user.participation}</TableCell>
                       <TableCell align="center">
-                        {user.ep +
+                        {(
+                          user.ep +
                           user.budapestList +
                           user.mayor +
                           user.twelve +
                           user.nine +
-                          user.participation}
+                          user.participation
+                        ).toFixed(1)}
                       </TableCell>
                     </TableRow>
                   ))}
