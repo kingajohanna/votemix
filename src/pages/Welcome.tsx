@@ -141,6 +141,7 @@ export const Welcome = () => {
           src="/calc.png"
           alt="calc"
           style={{
+            maxWidth: "430px",
             width: "98%",
           }}
         />
