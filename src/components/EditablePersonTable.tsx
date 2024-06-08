@@ -99,7 +99,7 @@ export const EditablePersonTable: React.FC<EditableTableProps> = ({
           <TableHead>
             <TableRow>
               <TableCell sx={{ padding: "8px" }}></TableCell>
-              <TableCell width={"80px"}>Jelölt</TableCell>
+              <TableCell width={"70px"}>Jelölt</TableCell>
               <TableCell>Pártnév</TableCell>
               <TableCell width={"80px"}>Százalék</TableCell>
             </TableRow>
