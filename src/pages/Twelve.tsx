@@ -14,12 +14,16 @@ import { initialTwelve } from "../utils/data";
 import { Guess, Guesses } from "../components/OtherGuess";
 import { calculatePercentagePoints } from "../utils/calculatePoints";
 import { isVoteDisabled } from "../utils/disable";
+import { Buttons } from "../components/Buttons";
+import { useNavigate } from "react-router-dom";
 
 export const Twelve = () => {
   const [username, _] = useLocalStorage("username");
   const [data, setData] = useState(initialTwelve);
   const [guesses, setGuesses] = useState<Guess[]>([]);
   const [final, setFinal] = useState<Guess>();
+  const [saved, setSaved] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -176,19 +180,28 @@ export const Twelve = () => {
           updateArgs={[true, true, true]}
         />
         {!isVoteDisabled() && data && (
-          <EditablePersonTable
-            data={data}
-            setData={(value: PersonData[]) => {
-              setData(value);
-              const userRef = doc(db, "votemix", username);
-              setDoc(userRef, { twelve: value }, { merge: true });
-            }}
-            handleReset={() => {
-              setData(initialTwelve);
-              const userRef = doc(db, "votemix", username);
-              setDoc(userRef, { twelve: [] }, { merge: true });
-            }}
-          />
+          <>
+            <EditablePersonTable
+              data={data}
+              setData={(value: PersonData[]) => {
+                setSaved(false);
+                setData(value);
+                const userRef = doc(db, "votemix", username);
+                setDoc(userRef, { twelve: value }, { merge: true });
+              }}
+              handleReset={() => {
+                setSaved(false);
+                setData(initialTwelve);
+                const userRef = doc(db, "votemix", username);
+                setDoc(userRef, { twelve: [] }, { merge: true });
+              }}
+            />
+            <Buttons
+              next={() => navigate("/9-district")}
+              saved={saved}
+              onsave={() => setSaved(true)}
+            />
+          </>
         )}
         {isVoteDisabled() && guesses.length > 0 && (
           <Guesses

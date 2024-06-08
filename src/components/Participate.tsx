@@ -5,11 +5,15 @@ import { db } from "../App";
 import { useLocalStorage } from "../hooks/useLocalStorage";
 import { Map } from "./Map";
 import { isVoteDisabled } from "../utils/disable";
+import { Buttons } from "./Buttons";
+import { useNavigate } from "react-router-dom";
 
 export const Participate = () => {
   const [username, _] = useLocalStorage("username");
   const [value, setValue] = useState(0);
   const [error, setError] = useState(false);
+  const [saved, setSaved] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -71,12 +75,18 @@ export const Participate = () => {
           const value = parseFloat(e.target.value);
           if (value < 0 || value > 100) setError(true);
           else {
+            setSaved(false);
             setError(false);
             setValue(value);
             const userRef = doc(db, "votemix", username);
             setDoc(userRef, { participation: value }, { merge: true });
           }
         }}
+      />
+      <Buttons
+        next={() => navigate("/european-parliament")}
+        saved={saved}
+        onsave={() => setSaved(true)}
       />
     </>
   );

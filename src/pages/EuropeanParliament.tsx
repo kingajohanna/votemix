@@ -13,6 +13,8 @@ import { initialEP } from "../utils/data";
 import { Guess, Guesses } from "../components/OtherGuess";
 import { isVoteDisabled } from "../utils/disable";
 import { calculatePercentagePoints } from "../utils/calculatePoints";
+import { Buttons } from "../components/Buttons";
+import { useNavigate } from "react-router-dom";
 
 itemSeries(Highcharts);
 
@@ -21,6 +23,8 @@ export const EuropeanParliament = () => {
   const [data, setData] = useState(initialEP);
   const [guesses, setGuesses] = useState<Guess[]>([]);
   const [final, setFinal] = useState<Guess>();
+  const [saved, setSaved] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -162,20 +166,29 @@ export const EuropeanParliament = () => {
           updateArgs={[true, true, true]}
         />
         {!isVoteDisabled() && data && (
-          <EditableTable
-            data={data}
-            setData={(value: PartyData[]) => {
-              const newValue = calculateMandates(value, 21);
-              setData(newValue);
-              const userRef = doc(db, "votemix", username);
-              setDoc(userRef, { ep: newValue }, { merge: true });
-            }}
-            handleReset={() => {
-              setData(initialEP);
-              const userRef = doc(db, "votemix", username);
-              setDoc(userRef, { ep: [] }, { merge: true });
-            }}
-          />
+          <>
+            <EditableTable
+              data={data}
+              setData={(value: PartyData[]) => {
+                setSaved(false);
+                const newValue = calculateMandates(value, 21);
+                setData(newValue);
+                const userRef = doc(db, "votemix", username);
+                setDoc(userRef, { ep: newValue }, { merge: true });
+              }}
+              handleReset={() => {
+                setSaved(false);
+                setData(initialEP);
+                const userRef = doc(db, "votemix", username);
+                setDoc(userRef, { ep: [] }, { merge: true });
+              }}
+            />
+            <Buttons
+              next={() => navigate("/budapest-list")}
+              saved={saved}
+              onsave={() => setSaved(true)}
+            />
+          </>
         )}
 
         {isVoteDisabled() && guesses.length > 0 && (

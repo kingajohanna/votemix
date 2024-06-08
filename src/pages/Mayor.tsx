@@ -14,12 +14,16 @@ import { initialMayor } from "../utils/data";
 import { Guess, Guesses } from "../components/OtherGuess";
 import { calculatePercentagePoints } from "../utils/calculatePoints";
 import { isVoteDisabled } from "../utils/disable";
+import { Buttons } from "../components/Buttons";
+import { useNavigate } from "react-router-dom";
 
 export const Mayor = () => {
   const [username, _] = useLocalStorage("username");
   const [data, setData] = useState(initialMayor);
   const [guesses, setGuesses] = useState<Guess[]>([]);
   const [final, setFinal] = useState<Guess>();
+  const [saved, setSaved] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -174,19 +178,28 @@ export const Mayor = () => {
           updateArgs={[true, true, true]}
         />
         {!isVoteDisabled() && data && (
-          <EditablePersonTable
-            data={data}
-            setData={(value: PersonData[]) => {
-              setData(value);
-              const userRef = doc(db, "votemix", username);
-              setDoc(userRef, { mayor: value }, { merge: true });
-            }}
-            handleReset={() => {
-              setData(initialMayor);
-              const userRef = doc(db, "votemix", username);
-              setDoc(userRef, { mayor: [] }, { merge: true });
-            }}
-          />
+          <>
+            <EditablePersonTable
+              data={data}
+              setData={(value: PersonData[]) => {
+                setSaved(false);
+                setData(value);
+                const userRef = doc(db, "votemix", username);
+                setDoc(userRef, { mayor: value }, { merge: true });
+              }}
+              handleReset={() => {
+                setSaved(false);
+                setData(initialMayor);
+                const userRef = doc(db, "votemix", username);
+                setDoc(userRef, { mayor: [] }, { merge: true });
+              }}
+            />
+            <Buttons
+              next={() => navigate("/12-district")}
+              saved={saved}
+              onsave={() => setSaved(true)}
+            />
+          </>
         )}
 
         {isVoteDisabled() && guesses.length > 0 && (

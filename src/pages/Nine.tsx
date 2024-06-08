@@ -14,12 +14,14 @@ import { initialNine } from "../utils/data";
 import { Guess, Guesses } from "../components/OtherGuess";
 import { calculatePercentagePoints } from "../utils/calculatePoints";
 import { isVoteDisabled } from "../utils/disable";
+import { Buttons } from "../components/Buttons";
 
 export const Nine = () => {
   const [username, _] = useLocalStorage("username");
   const [data, setData] = useState(initialNine);
   const [guesses, setGuesses] = useState<Guess[]>([]);
   const [final, setFinal] = useState<Guess>();
+  const [saved, setSaved] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -176,19 +178,29 @@ export const Nine = () => {
           updateArgs={[true, true, true]}
         />
         {!isVoteDisabled() && data && (
-          <EditablePersonTable
-            data={data}
-            setData={(value: PersonData[]) => {
-              setData(value);
-              const userRef = doc(db, "votemix", username);
-              setDoc(userRef, { nine: value }, { merge: true });
-            }}
-            handleReset={() => {
-              setData(initialNine);
-              const userRef = doc(db, "votemix", username);
-              setDoc(userRef, { nine: [] }, { merge: true });
-            }}
-          />
+          <>
+            <EditablePersonTable
+              data={data}
+              setData={(value: PersonData[]) => {
+                setSaved(false);
+                setData(value);
+                const userRef = doc(db, "votemix", username);
+                setDoc(userRef, { nine: value }, { merge: true });
+              }}
+              handleReset={() => {
+                setSaved(false);
+                setData(initialNine);
+                const userRef = doc(db, "votemix", username);
+                setDoc(userRef, { nine: [] }, { merge: true });
+              }}
+            />
+            <Buttons
+              next={() => {}}
+              saved={saved}
+              onsave={() => setSaved(true)}
+              nextDisabled
+            />
+          </>
         )}
         {isVoteDisabled() && guesses.length > 0 && (
           <Guesses

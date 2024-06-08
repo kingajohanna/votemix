@@ -12,12 +12,16 @@ import { initialBpList } from "../utils/data";
 import { calculatePercentagePoints } from "../utils/calculatePoints";
 import { Guess, Guesses } from "../components/OtherGuess";
 import { isVoteDisabled } from "../utils/disable";
+import { Buttons } from "../components/Buttons";
+import { useNavigate } from "react-router-dom";
 
 export const BudapestList = () => {
   const [username, _] = useLocalStorage("username");
   const [data, setData] = useState(initialBpList);
   const [guesses, setGuesses] = useState<Guess[]>([]);
   const [final, setFinal] = useState<Guess>();
+  const [saved, setSaved] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -159,20 +163,29 @@ export const BudapestList = () => {
           updateArgs={[true, true, true]}
         />
         {!isVoteDisabled() && data && (
-          <EditableTable
-            data={data}
-            setData={(value: PartyData[]) => {
-              const newValue = calculateMandates(value, 32);
-              setData(newValue);
-              const userRef = doc(db, "votemix", username);
-              setDoc(userRef, { budapestlist: newValue }, { merge: true });
-            }}
-            handleReset={() => {
-              setData(initialBpList);
-              const userRef = doc(db, "votemix", username);
-              setDoc(userRef, { budapestlist: [] }, { merge: true });
-            }}
-          />
+          <>
+            <EditableTable
+              data={data}
+              setData={(value: PartyData[]) => {
+                setSaved(false);
+                const newValue = calculateMandates(value, 32);
+                setData(newValue);
+                const userRef = doc(db, "votemix", username);
+                setDoc(userRef, { budapestlist: newValue }, { merge: true });
+              }}
+              handleReset={() => {
+                setSaved(false);
+                setData(initialBpList);
+                const userRef = doc(db, "votemix", username);
+                setDoc(userRef, { budapestlist: [] }, { merge: true });
+              }}
+            />
+            <Buttons
+              next={() => navigate("/mayor")}
+              saved={saved}
+              onsave={() => setSaved(true)}
+            />
+          </>
         )}
         {isVoteDisabled() && guesses.length > 0 && (
           <Guesses
