@@ -20,6 +20,7 @@ export interface GuessData {
 export interface Guess {
   username: string;
   data: GuessData[];
+  point?: number;
 }
 export interface GuessesProps {
   guesses: Guess[];
@@ -33,10 +34,6 @@ export const Guesses: React.FC<GuessesProps> = ({
   getPoints,
 }) => {
   const [maxPoint, setMaxPoint] = React.useState(0);
-  const sortedGuesses = guesses.map((guess) => ({
-    ...guess,
-    data: guess.data.sort((a, b) => a.name.localeCompare(b.name)),
-  }));
 
   const getPointsForGuess = (guess: Guess) => {
     const points = getPoints(guess);
@@ -45,6 +42,16 @@ export const Guesses: React.FC<GuessesProps> = ({
     }
     return points;
   };
+
+  const sortedGuesses = guesses.map((guess) => ({
+    ...guess,
+    data: guess.data.sort((a, b) => a.name.localeCompare(b.name)),
+    point: getPointsForGuess(guess),
+  }));
+
+  const orderedSortedGuesses = sortedGuesses.sort(
+    (a, b) => (b.point || 0) - (a.point || 0)
+  );
 
   return (
     <TableContainer component={Paper} sx={{ width: "100%" }}>
@@ -61,25 +68,26 @@ export const Guesses: React.FC<GuessesProps> = ({
           </TableRow>
         </TableHead>
         <TableBody>
-          <TableRow>
-            <TableCell align="center">
-              <Typography>Eredmény</Typography>
-            </TableCell>
-            {final?.data.map((cell, index) => (
-              <TableCell align="center" key={index}>
-                <Typography>{cell.percentage}</Typography>
+          {final?.data && (
+            <TableRow>
+              <TableCell align="center">
+                <Typography>Eredmény</Typography>
               </TableCell>
-            ))}
-            <TableCell align="center">
-              <Typography></Typography>
-            </TableCell>
-          </TableRow>
-          {sortedGuesses.map((row) => (
+              {final?.data.map((cell, index) => (
+                <TableCell align="center" key={index}>
+                  <Typography>{cell.percentage}</Typography>
+                </TableCell>
+              ))}
+              <TableCell align="center">
+                <Typography></Typography>
+              </TableCell>
+            </TableRow>
+          )}
+          {orderedSortedGuesses.map((row) => (
             <TableRow
               key={row.username}
               sx={{
-                backgroundColor:
-                  getPointsForGuess(row) === maxPoint ? "#c3b7ec" : "",
+                backgroundColor: row.point === maxPoint ? "#c3b7ec" : "",
               }}
             >
               <TableCell align="center">
@@ -91,7 +99,7 @@ export const Guesses: React.FC<GuessesProps> = ({
                 </TableCell>
               ))}
               <TableCell align="center">
-                <Typography>{getPointsForGuess(row)}</Typography>
+                <Typography>{row.point}</Typography>
               </TableCell>
             </TableRow>
           ))}
