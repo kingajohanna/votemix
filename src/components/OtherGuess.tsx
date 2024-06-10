@@ -73,11 +73,13 @@ export const Guesses: React.FC<GuessesProps> = ({
               <TableCell align="center">
                 <Typography>Eredmény</Typography>
               </TableCell>
-              {final?.data.map((cell, index) => (
-                <TableCell align="center" key={index}>
-                  <Typography>{cell.percentage}</Typography>
-                </TableCell>
-              ))}
+              {final?.data
+                .sort((a, b) => a.name.localeCompare(b.name))
+                .map((cell, index) => (
+                  <TableCell align="center" key={index}>
+                    <Typography>{cell.percentage}</Typography>
+                  </TableCell>
+                ))}
               <TableCell align="center">
                 <Typography></Typography>
               </TableCell>
