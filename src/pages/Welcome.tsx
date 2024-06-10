@@ -72,8 +72,23 @@ export const Welcome = () => {
         }
       }
     });
+    const sorted = users.sort(
+      (a, b) =>
+        (b.budapestList +
+        b.ep +
+        b.mayor +
+        b.nine +
+        b.twelve +
+        b.participation) -
+        (a.budapestList +
+        a.ep +
+        a.mayor +
+        a.nine +
+        a.twelve +
+        a.participation)
+    );
     setMax(max);
-    setPoints(users);
+    setPoints(sorted);
   };
 
   return (
@@ -219,12 +234,22 @@ export const Welcome = () => {
                       <TableCell component="th" scope="row">
                         {user.username}
                       </TableCell>
-                      <TableCell align="center">{user.ep}</TableCell>
-                      <TableCell align="center">{user.budapestList}</TableCell>
-                      <TableCell align="center">{user.mayor}</TableCell>
-                      <TableCell align="center">{user.twelve}</TableCell>
-                      <TableCell align="center">{user.nine}</TableCell>
-                      <TableCell align="center">{user.participation}</TableCell>
+                      <TableCell align="center">{user.ep.toFixed(2)}</TableCell>
+                      <TableCell align="center">
+                        {user.budapestList.toFixed(2)}
+                      </TableCell>
+                      <TableCell align="center">
+                        {user.mayor.toFixed(2)}
+                      </TableCell>
+                      <TableCell align="center">
+                        {user.twelve.toFixed(2)}
+                      </TableCell>
+                      <TableCell align="center">
+                        {user.nine.toFixed(2)}
+                      </TableCell>
+                      <TableCell align="center">
+                        {user.participation.toFixed(2)}
+                      </TableCell>
                       <TableCell align="center">
                         {(
                           user.ep +
@@ -233,7 +258,7 @@ export const Welcome = () => {
                           user.twelve +
                           user.nine +
                           user.participation
-                        ).toFixed(1)}
+                        ).toFixed(2)}
                       </TableCell>
                     </TableRow>
                   ))}

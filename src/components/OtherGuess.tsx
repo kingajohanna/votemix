@@ -99,7 +99,7 @@ export const Guesses: React.FC<GuessesProps> = ({
                 </TableCell>
               ))}
               <TableCell align="center">
-                <Typography>{row.point}</Typography>
+                <Typography>{row.point?.toPrecision(2)}</Typography>
               </TableCell>
             </TableRow>
           ))}
